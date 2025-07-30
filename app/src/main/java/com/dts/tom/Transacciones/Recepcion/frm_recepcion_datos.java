@@ -9584,7 +9584,7 @@ public class frm_recepcion_datos extends PBase {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             }
 
-            if (Existe_Lp) {
+/*            if (Existe_Lp) {
                 execws(37);
             } else{
                 if (guardando_recepcion){
@@ -9657,11 +9657,11 @@ public class frm_recepcion_datos extends PBase {
                     }
                     fillUbicacion();
                 }
-            }
+            }*/
 
             //#AT20250723 Deje esto en comentario hasta estabilizar la nueva funcionaldiad agregada
             //arriba, y asi poder corregir errores facilmente
-            /*if (Existe_Lp){
+            if (Existe_Lp){
                 //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
                 if (gl.bloquear_lp_hh){
                     //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
@@ -9754,7 +9754,7 @@ public class frm_recepcion_datos extends PBase {
                     }
                     fillUbicacion();
                 }
-            }*/
+            }
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());

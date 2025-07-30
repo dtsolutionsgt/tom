@@ -10,8 +10,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -37,22 +35,16 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
-import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.google.common.collect.Table;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -503,7 +495,7 @@ public class frm_inv_cic_add extends PBase {
                 String lote = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Lote : gl.inv_ciclico.Lote_stock;
                 txtLote1.setText(lote);
 
-                String fecha = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Fecha_Vence : gl.inv_ciclico.Fecha_Vence_Stock;
+                String fecha = gl.inv_ciclico.Fecha_Vence;
                 dtpVence.setText(fecha);
 
                 if (gl.inv_ciclico.IdPresentacion == 0) {
@@ -746,7 +738,11 @@ public class frm_inv_cic_add extends PBase {
 
     private void LoadInvCongelado() {
         try {
+
             if (invCongelado != null) {
+
+                BeProductoUbicacion = gBeProducto;
+
                 idPresentacion = invCongelado.IdPresentacion;
 
                 //#CKFK20241217 Cambié la ubicación nueva por la del inventario cíclico que estaba cargado
@@ -1130,10 +1126,13 @@ public class frm_inv_cic_add extends PBase {
                     pitem.Contado = true;
 
                     if (pitem.Cantidad==0){
-                       msgAskCantidadCero("Guardar la cantidad en 0");
+                       msgAskCantidadNoValida("Guardar la cantidad en 0");
+                    }if (pitem.Cantidad>10000){
+                        msgAskCantidadNoValida("Guardar la cantidad en " + pitem.Cantidad);
                     }else{
                         execws(9);
                     }
+
                 } else if (esInvCongelado) {
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
                     pitem.IdStock = invCongelado.IdStock;
@@ -1193,12 +1192,23 @@ public class frm_inv_cic_add extends PBase {
                     pitem.Contado = true;
 
                     if (pitem.Cantidad==0){
-                        msgAskCantidadCero("Guardar la cantidad en 0");
+                        msgAskCantidadNoValida("Guardar la cantidad en 0");
+                    }if (pitem.Cantidad>10000){
+                        msgAskCantidadNoValida("Guardar la cantidad en " + pitem.Cantidad);
                     }else{
                         execws(9);
                     }
                 } else {
-                    Guardar();
+
+                    gl.inv_ciclico.cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
+
+                    if (gl.inv_ciclico.cantidad==0){
+                        msgAskCantidadNoValida("Guardar la cantidad en 0");
+                    }if (gl.inv_ciclico.cantidad>10000){
+                        msgAskCantidadNoValida("Guardar la cantidad en " + gl.inv_ciclico.cantidad);
+                    }else{
+                        Guardar();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -1218,7 +1228,6 @@ public class frm_inv_cic_add extends PBase {
             }
 
             gl.inv_ciclico.cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
-
 
             if (gl.inv_ciclico.control_peso) {
                 gl.inv_ciclico.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
@@ -1265,7 +1274,9 @@ public class frm_inv_cic_add extends PBase {
 
                 //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 if (pitem.Cantidad==0){
-                    msgAskCantidadCeroActualiza("Guardar la cantidad en 0");
+                    msgAskCantidadNoValidaActualiza("Guardar la cantidad en " + pitem.Cantidad);
+                }if (pitem.Cantidad>10000){
+                    msgAskCantidadNoValidaActualiza("Guardar la cantidad en " + pitem.Cantidad);
                 }else{
                     execws(1);
                 }
@@ -1424,6 +1435,7 @@ public class frm_inv_cic_add extends PBase {
                             item.IdPresentacion = invCongelado.IdPresentacion;
                             item.IdUnidadMedida =invCongelado.IdUnidadMedida;
                             item.IdStock = invCongelado.IdStock;
+                            item.IdProductoEstado = invCongelado.IdProductoEstado;
                         } else {
                             item.Lote_stock = gl.inv_ciclico.Lote_stock;
                             item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
@@ -1432,6 +1444,7 @@ public class frm_inv_cic_add extends PBase {
                             item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
                             item.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
                             item.IdStock = gl.inv_ciclico.IdStock;
+                            item.IdProductoEstado = gl.inv_ciclico.IdProductoEstado;
                         }
 
                         callMethod("Get_Conteo_Inv_Ciclico", "pInvCiclico", item);
@@ -1955,7 +1968,9 @@ public class frm_inv_cic_add extends PBase {
                 if (pIdUbicacion > 0) execws(6);
             }
 
-            if (esInvCongelado) LoadInvCongelado();
+            if (esInvCongelado) {
+                execws(8);
+            }
         } catch (Exception e) {
             mu.msgbox("processAgregarConteo: " + e.getMessage());
         }
@@ -2056,12 +2071,15 @@ public class frm_inv_cic_add extends PBase {
                     }
                 }
             }
+
+            if (esInvCongelado) LoadInvCongelado();
+
         } catch (Exception e) {
             mu.msgbox("LLenaPresentacion " + e.getMessage());
         }
     }
 
-    private void msgAskCantidadCero(String msg) {
+    private void msgAskCantidadNoValida(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
@@ -2080,6 +2098,7 @@ public class frm_inv_cic_add extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    txtCantContada.requestFocus();
                     return;
                 }
             });
@@ -2092,7 +2111,7 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
-    private void msgAskCantidadCeroActualiza(String msg) {
+    private void msgAskCantidadNoValidaActualiza(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
@@ -2111,7 +2130,7 @@ public class frm_inv_cic_add extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    return;
+                    txtCantContada.requestFocus();return;
                 }
             });
 

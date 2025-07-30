@@ -261,14 +261,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                String fechaVenceStock = DT.getString(9).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(9));
+                                String fechaVenceStock = DT.getString(9).contains("1900-01-01T00:00:00") ? "01-01-1900" : du.convierteFechaMostrar(DT.getString(9));
                                 data_rec.Fecha_Vence_Stock =  fechaVenceStock;
                             }else{
                                 data_rec.Fecha_Vence_Stock = "";
                             }
 
                             if (DT.getString(10)!=null){
-                                String fechaVence = DT.getString(10).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(10));
+                                String fechaVence = DT.getString(10).contains("1900-01-01T00:00:00") ? "01-01-1900" : du.convierteFechaMostrar(DT.getString(10));
                                 data_rec.Fecha_Vence = fechaVence;
                             }else{
                                 data_rec.Fecha_Vence = "";
@@ -409,10 +409,14 @@ public class frm_inv_cic_conteo extends PBase {
                     CodigoEscaneado = termino;
                     tmp = buscarPorCodigo(CodigoEscaneado);
 
-                    if (tmp.size() == 1) {
+                    if (tmp.size() == 1 ) {
                         cargarRegistro(tmp.get(0));
                     } else {
-                        mostrarDialogo(2);
+                        if (tmp.size()>1){
+                            mostrarDialogo(2);
+                        }else if(tmp.size()==0){
+                            msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+                        }
                     }
                 }
             } else {
@@ -422,7 +426,11 @@ public class frm_inv_cic_conteo extends PBase {
                 if (tmp.size() == 1) {
                     cargarRegistro(tmp.get(0));
                 } else {
-                    mostrarDialogo(2);
+                    if (tmp.size()>1){
+                        mostrarDialogo(2);
+                    }else if(tmp.size()==0){
+                        msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -589,7 +597,7 @@ public class frm_inv_cic_conteo extends PBase {
             }
         }
 
-        txtBuscFiltro.setText("");  // ← ¡Siempre limpia después de escanear!
+        //txtBuscFiltro.setText("");  // ← ¡Siempre limpia después de escanear!
 
         if (registros > 1) {
             FiltroxUbicacion(evaluar);
@@ -1027,7 +1035,8 @@ public class frm_inv_cic_conteo extends PBase {
             gl.lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
 
             if(gl.lista_estados !=null){
-                txtBuscFiltro.setText("");
+                //#CKFK20250730 Puse esto en comentario para que no me limpie la ubicación
+                //txtBuscFiltro.setText("");
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }else{
                 msgbox("No hay estados para asignar al producto");
@@ -1225,7 +1234,7 @@ public class frm_inv_cic_conteo extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
 
                     gl.nuevo_producto_cic = txtBuscFiltro.getText().toString().trim();
-                    txtBuscFiltro.setText("");
+                   // txtBuscFiltro.setText("");
                     gl.cerrarActividad2=false;
                     startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
                 }
