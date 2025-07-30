@@ -2,22 +2,28 @@ package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -28,8 +34,12 @@ import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_rec
 import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
 
@@ -125,7 +135,8 @@ public class frm_inv_cic_conteo extends PBase {
                         Log.d("DEBUG_UBIC", "Escaneado: [" + texto + "]");
 
                         if (!texto.isEmpty()) {
-                            ListaFiltrada();  // Sigue usando parseInt adentro
+                            procesarEscaneoInteligente(texto);
+                            //ListaFiltrada();  // Sigue usando parseInt adentro
                         } else {
                             toast("No ingresó una Ubicación!");
                         }
@@ -358,6 +369,197 @@ public class frm_inv_cic_conteo extends PBase {
 
    }
 
+    private String CodigoEscaneado = null;
+    private int UbicacionEscaneada = 0;
+    private List<clsBe_inv_reconteo_data> tmp = new ArrayList<>();
+
+    public boolean esNumeroEntero(String valor) {
+        if (valor == null || valor.trim().isEmpty()) return false;
+
+        try {
+            Integer.parseInt(valor.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void procesarEscaneoInteligente(String termino) {
+        try {
+            tmp.clear();
+            termino = termino.trim();
+
+            if (termino.isEmpty()) {
+                toast("Por favor ingrese una ubicación o código válido.");
+            }
+
+            //Tipo 1 = Solicita código
+            //Tipo 2 = Solicita ubicación
+            if (esNumeroEntero(termino)) {
+                UbicacionEscaneada = Integer.parseInt(termino);
+                tmp = buscarPorUbicacion(UbicacionEscaneada);
+
+                if (tmp.size() > 0) {
+                    if (tmp.size() == 1) {
+                        cargarRegistro(tmp.get(0));
+                    } else {
+                        mostrarDialogo(1);
+                    }
+                } else {
+                    CodigoEscaneado = termino;
+                    tmp = buscarPorCodigo(CodigoEscaneado);
+
+                    if (tmp.size() == 1) {
+                        cargarRegistro(tmp.get(0));
+                    } else {
+                        mostrarDialogo(2);
+                    }
+                }
+            } else {
+                CodigoEscaneado = termino;
+                tmp = buscarPorCodigo(CodigoEscaneado);
+
+                if (tmp.size() == 1) {
+                    cargarRegistro(tmp.get(0));
+                } else {
+                    mostrarDialogo(2);
+                }
+            }
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorUbicacion(int ubicacion) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (r.NoUbic == ubicacion) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorCodigo(String codigo) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (r.getCodigo().equalsIgnoreCase(codigo)) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorCodigoUbicacion(String codigo, int ubicacion) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (r.getCodigo().equalsIgnoreCase(codigo) && r.NoUbic == ubicacion) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private void procesarCodigoUbicacion() {
+        tmp = buscarPorCodigoUbicacion(CodigoEscaneado, UbicacionEscaneada);
+
+        if (!tmp.isEmpty()) {
+            clsBe_inv_reconteo_data tmpItem = tmp.get(0);
+            cargarRegistro(tmpItem);
+            toast("Cargando datos del IdStock: " + tmpItem.IdStock);
+        } else {
+            toast("No se encontraron registros con ese código y ubicación.");
+        }
+    }
+
+    private void cargarRegistro(clsBe_inv_reconteo_data item) {
+        try {
+            gl.inv_ciclico = item;
+            Busqueda = true;
+
+            execws(4);
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void mostrarDialogo(int Tipo) {
+        try {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Inv. cíclico");
+            alert.setIcon(R.drawable.scan);
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.frm_filtro_inv_ciclico, null);
+            alert.setView(dialogView);
+
+            TextView lblTitulo = dialogView.findViewById(R.id.lblTitulo);
+            EditText input = dialogView.findViewById(R.id.txtEntrada);
+
+            String termino = Tipo == 1 ? "código de producto":"ubicación";
+            lblTitulo.setText(String.format("Se encontraron ("+tmp.size()+") registros, por favor ingrese %s", termino));
+
+            if (Tipo == 1) {
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+
+            alert.setNegativeButton("Cancelar", (dialogInterface, which) -> dialogInterface.dismiss());
+            alert.setPositiveButton("Aceptar", null);
+            AlertDialog dialog = alert.create();
+
+            dialog.setOnShowListener(d -> {
+                Button btnAceptar = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnAceptar.setOnClickListener(v -> {
+                    String valor = input.getText().toString().trim();
+                    procesarValor(valor, termino, Tipo);
+                    dialog.dismiss();
+                });
+            });
+
+            input.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                    String valor = input.getText().toString().trim();
+                    procesarValor(valor, termino, Tipo);
+                    dialog.dismiss();
+                    return true;
+                }
+                return false;
+            });
+
+            dialog.show();
+            showkeyb();
+
+        } catch (Exception e) {
+            addlog("mostrarDialogo", e.getMessage(), "");
+        }
+    }
+
+    private void procesarValor(String valor, String termino, int Tipo) {
+        try {
+            valor = valor.trim();
+
+            if (valor.isEmpty()) {
+                toast("Debe ingresar " + termino);
+            }
+
+            if (Tipo == 2) {
+                if (!esNumeroEntero(valor)) {
+                    toast("Ubicación inválida");
+                }
+                UbicacionEscaneada = Integer.parseInt(valor);
+            } else {
+                CodigoEscaneado = valor;
+            }
+
+            procesarCodigoUbicacion();
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
     private void ListaFiltrada() {
         int registros = 0;
         String filtroTexto = txtBuscFiltro.getText().toString().trim();
