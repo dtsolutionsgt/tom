@@ -370,18 +370,14 @@ public class frm_inv_cic_conteo extends PBase {
    }
 
     private String CodigoEscaneado = null;
-    private int UbicacionEscaneada = 0;
+    private String UbicacionEscaneada = "";
     private List<clsBe_inv_reconteo_data> tmp = new ArrayList<>();
 
     public boolean esNumeroEntero(String valor) {
-        if (valor == null || valor.trim().isEmpty()) return false;
+        if (valor == null || valor.isEmpty()) return false;
 
-        try {
-            Integer.parseInt(valor.trim());
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        valor = valor.replaceAll("[^\\p{Print}]", "").trim();
+        return valor.matches("-?\\d+");
     }
 
     private void procesarEscaneoInteligente(String termino) {
@@ -396,7 +392,7 @@ public class frm_inv_cic_conteo extends PBase {
             //Tipo 1 = Solicita código
             //Tipo 2 = Solicita ubicación
             if (esNumeroEntero(termino)) {
-                UbicacionEscaneada = Integer.parseInt(termino);
+                UbicacionEscaneada = termino;
                 tmp = buscarPorUbicacion(UbicacionEscaneada);
 
                 if (tmp.size() > 0) {
@@ -438,10 +434,10 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
-    private List<clsBe_inv_reconteo_data> buscarPorUbicacion(int ubicacion) {
+    private List<clsBe_inv_reconteo_data> buscarPorUbicacion(String ubicacion) {
         List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
         for (clsBe_inv_reconteo_data r : data_list) {
-            if (r.NoUbic == ubicacion) {
+            if (String.valueOf(r.NoUbic).equals(ubicacion)) {
                 resultados.add(r);
             }
         }
@@ -458,10 +454,10 @@ public class frm_inv_cic_conteo extends PBase {
         return resultados;
     }
 
-    private List<clsBe_inv_reconteo_data> buscarPorCodigoUbicacion(String codigo, int ubicacion) {
+    private List<clsBe_inv_reconteo_data> buscarPorCodigoUbicacion(String codigo, String ubicacion) {
         List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
         for (clsBe_inv_reconteo_data r : data_list) {
-            if (r.getCodigo().equalsIgnoreCase(codigo) && r.NoUbic == ubicacion) {
+            if (r.getCodigo().equalsIgnoreCase(codigo) && String.valueOf(r.NoUbic).equalsIgnoreCase(ubicacion)) {
                 resultados.add(r);
             }
         }
@@ -558,7 +554,7 @@ public class frm_inv_cic_conteo extends PBase {
                 if (!esNumeroEntero(valor)) {
                     toast("Ubicación inválida");
                 }
-                UbicacionEscaneada = Integer.parseInt(valor);
+                UbicacionEscaneada = valor;
             } else {
                 CodigoEscaneado = valor;
             }
