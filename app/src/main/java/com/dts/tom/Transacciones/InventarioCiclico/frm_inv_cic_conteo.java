@@ -66,7 +66,7 @@ public class frm_inv_cic_conteo extends PBase {
 
     //Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
-    private final ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
+    private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private final ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
     private final clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
@@ -513,7 +513,12 @@ public class frm_inv_cic_conteo extends PBase {
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
             }
 
-            alert.setNegativeButton("Cancelar", (dialogInterface, which) -> dialogInterface.dismiss());
+            alert.setNegativeButton("Cancelar", (dialogInterface, which) -> {
+                lista_filtro = new ArrayList<>(buscarPorCodigo(CodigoEscaneado));
+                adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(), lista_filtro);
+                listCiclico.setAdapter(adapter_ciclico);
+                dialogInterface.dismiss();
+            });
             alert.setPositiveButton("Aceptar", null);
             AlertDialog dialog = alert.create();
 
@@ -1049,6 +1054,10 @@ public class frm_inv_cic_conteo extends PBase {
     public void limpiar(View view) {
         txtBuscFiltro.setText("");
         txtBuscFiltro.requestFocus();
+
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+        listCiclico.setAdapter(adapter_ciclico);
+        adapter_ciclico.notifyDataSetChanged();
     }
 
     public void agregarNuevoConteo(View view) {
