@@ -534,7 +534,6 @@ public class frm_inv_cic_conteo extends PBase {
             input.setOnEditorActionListener((v, actionId, event) -> {
                 if (actionId == EditorInfo.IME_ACTION_DONE ||
                         (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
-
                     String valor = input.getText().toString().trim();
                     procesarValor(valor, termino, Tipo);
                     dialog.dismiss();

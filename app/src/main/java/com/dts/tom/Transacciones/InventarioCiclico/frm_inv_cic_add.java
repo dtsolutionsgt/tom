@@ -213,7 +213,7 @@ public class frm_inv_cic_add extends PBase {
                         int evaluar;
                         try {
                             evaluar = Integer.parseInt(filtroTexto);
-                            txtUbicNueva.setText(evaluar);// Ok, porque "00030" se convierte a 30
+                            txtUbicNueva.setText(""+evaluar);// Ok, porque "00030" se convierte a 30
                         } catch (NumberFormatException e) {
                             msgbox("La ubicación nueva debe ser un número válido.");
                             txtUbicNueva.setText("");
@@ -224,7 +224,7 @@ public class frm_inv_cic_add extends PBase {
                         filtroTexto = txtUbic.getText().toString().trim();
                         try {
                             evaluar = Integer.parseInt(filtroTexto);
-                            txtUbic.setText(evaluar);// Ok, porque "00030" se convierte a 30
+                            txtUbic.setText(""+evaluar);// Ok, porque "00030" se convierte a 30
                         } catch (NumberFormatException e) {
                             msgbox("La ubicación debe ser un número válido.");
                             txtUbic.setText("");
@@ -442,7 +442,8 @@ public class frm_inv_cic_add extends PBase {
                         gl.inv_ciclico.Lote.equals(gl.inv_ciclico.Lote_stock) &&
                         gl.inv_ciclico.IdUbicacion_nuevo == 0;
 
-                //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
+                //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
+                // y tam_list para saber minimo y maximo a recorrer
                 Index = gl.IndexCiclico;
                 tam_lista = gl.reconteo_list.size() - 1;
 
@@ -1064,8 +1065,12 @@ public class frm_inv_cic_add extends PBase {
 
                 pitem = new clsBeTrans_inv_ciclico();
                 String Ubic = txtUbicNueva.getText().toString();
-                int UbicNueva =  Ubic.isEmpty() ? 0 : Integer.valueOf(Ubic);
-                pitem.IdUbicacion_nuevo = UbicNueva;
+                String Ubic2 = txtUbic.getText().toString();
+                int UbicNueva =  Ubic.isEmpty() ? 0 : Ubic.equals(Ubic2)?0:Integer.valueOf(Ubic);
+
+                if (UbicNueva==0){
+                    txtUbicNueva.setText("0");
+                }
 
                 if (NuevoConteo && !existeConteo && !esInvCongelado) {
 
@@ -1124,11 +1129,17 @@ public class frm_inv_cic_add extends PBase {
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
                     pitem.IdBodega = gl.IdBodega;
                     pitem.Contado = true;
+                    pitem.EsNuevo = true;
 
-                    if (pitem.Cantidad==0){
+                    if (pitem.Cantidad==0 && pitem.getIdUbicacion_nuevo()!=0){
+                        msgbox("Hizo un cambio de ubicación la cantidad no puede ser 0");
+                        return;
+                    }else if (pitem.Cantidad==0){
                        msgAskCantidadNoValida("Guardar la cantidad en 0");
+                        return;
                     }if (pitem.Cantidad>10000){
                         msgAskCantidadNoValida("Guardar la cantidad en " + pitem.Cantidad);
+                        return;
                     }else{
                         execws(9);
                     }
@@ -1136,6 +1147,7 @@ public class frm_inv_cic_add extends PBase {
                 } else if (esInvCongelado) {
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
                     pitem.IdStock = invCongelado.IdStock;
+                    pitem.EsNuevo = false;
 
                     pitem.IdProductoBodega = gBeProducto.IdProductoBodega;
                     pitem.IdUnidadMedida = gBeProducto.IdUnidadMedidaBasica;
@@ -1188,13 +1200,26 @@ public class frm_inv_cic_add extends PBase {
                     pitem.Idoperador = gl.IdOperador;
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
                     pitem.IdBodega = gl.IdBodega;
-                    pitem.EsNuevo = true;
                     pitem.Contado = true;
+                    pitem.Fec_Mod = du.Fecha_CompletaT();
 
-                    if (pitem.Cantidad==0){
+                    if (pitem.Cant_stock!=0 &&
+                       (pitem.IdUbicacion_nuevo!=0 ||
+                        !pitem.Lote.equals(pitem.Lote_stock) ||
+                        pitem.IdProductoEstado!=pitem.IdProductoEst_nuevo ||
+                        !pitem.Fecha_vence.equals(pitem.Fecha_vence_stock) )){
+                        pitem.Cant_stock=0.0;
+                    }
+
+                    if (pitem.Cantidad==0 && pitem.getIdUbicacion_nuevo()!=0){
+                        msgbox("Hizo un cambio de ubicación la cantidad no puede ser 0");
+                        return;
+                    }else if (pitem.Cantidad==0){
                         msgAskCantidadNoValida("Guardar la cantidad en 0");
+                        return;
                     }if (pitem.Cantidad>10000){
                         msgAskCantidadNoValida("Guardar la cantidad en " + pitem.Cantidad);
+                        return;
                     }else{
                         execws(9);
                     }
@@ -1202,13 +1227,18 @@ public class frm_inv_cic_add extends PBase {
 
                     gl.inv_ciclico.cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
 
-                    if (gl.inv_ciclico.cantidad==0){
-                        msgAskCantidadNoValida("Guardar la cantidad en 0");
-                    }if (gl.inv_ciclico.cantidad>10000){
-                        msgAskCantidadNoValida("Guardar la cantidad en " + gl.inv_ciclico.cantidad);
-                    }else{
-                        Guardar();
+                    gl.inv_ciclico.IdUbicacion_nuevo = UbicNueva;
+
+                    if (gl.inv_ciclico.Cant_Stock!=0 &&
+                       (gl.inv_ciclico.IdUbicacion_nuevo!=0 ||
+                        !gl.inv_ciclico.Lote.equals(gl.inv_ciclico.Lote_stock) ||
+                        gl.inv_ciclico.IdProductoEstado!=gl.inv_ciclico.IdProductoEst_nuevo ||
+                        !gl.inv_ciclico.Fecha_Vence.equals(gl.inv_ciclico.Fecha_Vence_Stock) )){
+                        gl.inv_ciclico.Cant_Stock=0.0;
                     }
+
+                    Guardar();
+
                 }
             }
         } catch (Exception e) {
@@ -1249,6 +1279,7 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdStock = 0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                 pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
+                pitem.IdUbicacion_nuevo = gl.inv_ciclico.IdUbicacion_nuevo;
                 pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
                 pitem.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence);
                 pitem.Lote = Lote;
@@ -1266,6 +1297,7 @@ public class frm_inv_cic_add extends PBase {
                 pitem.Cant_stock = gl.inv_ciclico.Cant_Stock;
                 pitem.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
                 pitem.Contado = true;
+                pitem.Fec_Mod = du.Fecha_CompletaT();
 
                 if (pitem.IdPresentacion > 0) {
 
@@ -1275,8 +1307,10 @@ public class frm_inv_cic_add extends PBase {
                 //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 if (pitem.Cantidad==0){
                     msgAskCantidadNoValidaActualiza("Guardar la cantidad en " + pitem.Cantidad);
+                    return;
                 }if (pitem.Cantidad>10000){
                     msgAskCantidadNoValidaActualiza("Guardar la cantidad en " + pitem.Cantidad);
+                    return;
                 }else{
                     execws(1);
                 }
@@ -1301,7 +1335,7 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
-    private boolean AgregaNuevoRegistro(int IdStock){
+   /* private boolean AgregaNuevoRegistro(int IdStock){
 
         try{
 
@@ -1312,7 +1346,6 @@ public class frm_inv_cic_add extends PBase {
                 execws(2);
 
             }else {
-
 
                 BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
                 BeTrans_inv_ciclico.IdInvCiclico = 0;
@@ -1358,7 +1391,7 @@ public class frm_inv_cic_add extends PBase {
             mu.msgbox("inv_cic_AgregarNuevoRegistro:"+e.getMessage());
             return  false;
         }
-    }
+    }*/
 
     public class WebServiceHandler extends WebService {
 
@@ -1372,11 +1405,12 @@ public class frm_inv_cic_add extends PBase {
                 switch (ws.callback) {
                     case 1:
                         if (BeInvEnc.Cambia_Ubicacion) {
-                            String NuevaUbicacion = txtUbicNueva.getText().toString();
 
-                            if (!NuevaUbicacion.isEmpty()) {
-                                pitem.IdUbicacion_nuevo = Integer.valueOf(NuevaUbicacion);
-                            }
+                            String Ubic = txtUbicNueva.getText().toString();
+                            String Ubic2 = txtUbic.getText().toString();
+                            int UbicNueva =  Ubic.isEmpty() ? 0 : Ubic.equals(Ubic2)?0:Integer.valueOf(Ubic);
+
+                            pitem.IdUbicacion_nuevo =  UbicNueva;
                         }
 
                         callMethod("Inventario_Ciclico_Act_Conteo_Andr",
@@ -1484,7 +1518,7 @@ public class frm_inv_cic_add extends PBase {
                     Inv_Ciclico_Actualiza_Conteo();
                     break;
                 case 2:
-                    MaxIDInventarioCiclico_();
+                    //MaxIDInventarioCiclico_();
                     break;
                 case 3:
                     Inventario_Agregar_Conteo_();
@@ -1682,16 +1716,16 @@ public class frm_inv_cic_add extends PBase {
         }
     }
 
-    private void MaxIDInventarioCiclico_() {
+    /*private void MaxIDInventarioCiclico_() {
 
         try {
 
             IDInventarioCiclico = xobj.getresult(Integer.class,"MaxIDInventarioCiclico");
 
             BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
-            BeTrans_inv_ciclico.IdInvCiclico = 0;
+            BeTrans_inv_ciclico.IdInvCiclico = IDInventarioCiclico;
             BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
-            BeTrans_inv_ciclico.IdStock = IDInventarioCiclico;
+            BeTrans_inv_ciclico.IdStock = 0;
             BeTrans_inv_ciclico.IdProductoBodega =  gl.inv_ciclico.IdProductoBodega;
             BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
             BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
@@ -1747,7 +1781,7 @@ public class frm_inv_cic_add extends PBase {
         } catch (Exception e) {
             mu.msgbox("Inventario_Agregar_Conteo: "+e.getMessage());
         }
-    }
+    }*/
 
     private void Inventario_Agregar_Conteo_() {
 
