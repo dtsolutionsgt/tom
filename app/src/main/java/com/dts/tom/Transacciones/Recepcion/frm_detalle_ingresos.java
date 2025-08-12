@@ -144,10 +144,7 @@ public class frm_detalle_ingresos extends PBase {
             return false;
         });
 
-        txtUbicacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { }
-        });
+        txtUbicacion.setOnClickListener(view -> { });
     }
 
     private void Load(){
