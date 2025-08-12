@@ -269,4 +269,5 @@ public class clsBeTrans_ubic_hh_det {
     public void setNo_Linea(int value) {
         No_Linea=value;
     }
+
 }
