@@ -39,6 +39,7 @@ public class clsBeProducto_Presentacion {
     @Element(required=false) public int IdPresentacionPallet=0;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public boolean ExisteStock=false;
+    @Element(required=false) public clsBeProducto_presentacion_tarimaList MedidasPorTarima=new clsBeProducto_presentacion_tarimaList();
 
     // Lista dual para XML y JSON
     @Element(required=false) public clsBeProducto_presentacion_tarimaList MedidasPorTarimaXml = new clsBeProducto_presentacion_tarimaList();
