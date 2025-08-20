@@ -3244,7 +3244,7 @@ public class frm_recepcion_datos extends PBase {
                     if (gl.TipoOpcion==2){
                         pLineaOC  = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
                     }else if(pLineaOC==-1){
-                        pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOCXml.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
+                        pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
                     }
 
                     if (BeProducto.Presentacion != null){
@@ -3367,7 +3367,7 @@ public class frm_recepcion_datos extends PBase {
                     if (gl.TipoOpcion==2){
                         pLineaOC  = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
                     }else if(pLineaOC==-1){
-                        pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOCXml.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
+                        pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
                     }
 
                     if (BeProducto.Presentacion != null){

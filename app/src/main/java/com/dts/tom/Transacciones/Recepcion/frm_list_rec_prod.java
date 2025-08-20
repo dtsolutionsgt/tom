@@ -519,7 +519,9 @@ public class frm_list_rec_prod extends PBase {
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
-                    pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOCXml;
+                    //#CKFK20250817 Puse esto en comentario
+                    //pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOCXml;
+                    pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
                     //GT17062021 Se reordena la lista por num_linea
                     if (pListDetalleOC.items==null){
                         throw new Exception("El documento de ingreso no tiene detalles");
@@ -937,9 +939,9 @@ public class frm_list_rec_prod extends PBase {
             //progress.setMessage("Validando estado de recepción");
             //progress.show();
 
-            if (gBeOrdenCompra.DetalleOCXml!=null){
+            if (gBeOrdenCompra.DetalleOC!=null){
 
-                for (clsBeTrans_oc_det Obj: gBeOrdenCompra.DetalleOCXml.items) {
+                for (clsBeTrans_oc_det Obj: gBeOrdenCompra.DetalleOC.items) {
 
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
@@ -1686,7 +1688,7 @@ public class frm_list_rec_prod extends PBase {
                         if (!Recepcion_Completa()){
 
                             if (vTipoDiferencia!=0){
-                                pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOCXml.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
+                                pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOC.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
                                 Lista_Detalle_Documento_Ingreso();
                             }
 

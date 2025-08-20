@@ -46,9 +46,11 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String Serie;
     @Element(required=false) public String Correlativo;
     @Element(required=false) public int IdDespachoEnc;
+    @Element(required=false) public clsBeTrans_oc_detList DetalleOC = new clsBeTrans_oc_detList();
 
-    @Element(required=false) public clsBeTrans_oc_detList DetalleOCXml = new clsBeTrans_oc_detList();
-    @SerializedName("DetalleOC") private List<clsBeTrans_oc_det> DetalleOCJson = new ArrayList<>();
+    //#CKFK20250817 Puse esto en comentario
+    //@Element(required=false) public clsBeTrans_oc_detList DetalleOCXml = new clsBeTrans_oc_detList();
+    //@SerializedName("DetalleOC") private List<clsBeTrans_oc_det> DetalleOC = new ArrayList<>();
 
     @Element(required=false) public clsBeTrans_oc_det_loteList DetalleLotes=new clsBeTrans_oc_det_loteList();
     @Element(required=false) public clsBeI_nav_barras_palletList DetallePallets=new clsBeI_nav_barras_palletList();
@@ -75,7 +77,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String Codigo_Empresa_ERP="";
     @Element(required=false) public int IdCampana=0;
 
-    public clsBeTrans_oc_detList getDetalleOC() {
+   /* public clsBeTrans_oc_detList getDetalleOC() {
         if (DetalleOCXml != null && DetalleOCXml.items != null && !DetalleOCXml.items.isEmpty()) {
             return DetalleOCXml;
         } else {
@@ -95,7 +97,7 @@ public class clsBeTrans_oc_enc {
             DetalleOCXml = new clsBeTrans_oc_detList();
             DetalleOCXml.items = DetalleOCJson;
         }
-    }
+    }*/
 
     public clsBeTrans_oc_pol getObjPoliza() {
         return ObjPoliza;
