@@ -1483,6 +1483,9 @@ public class frm_list_rec_prod extends PBase {
 
                     }else{
                         mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                        //#AT20250822 Reiniciar el valor de estas variables si no se encutrá la barra
+                        Escaneo_Pallet = false;
+                        gl.Escaneo_Pallet = false;
                         return;
                     }
 
@@ -1490,6 +1493,9 @@ public class frm_list_rec_prod extends PBase {
 
                 }else{
                     mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                    //#AT20250822 Reiniciar el valor de estas variables si no se encutrá la barra
+                    Escaneo_Pallet = false;
+                    gl.Escaneo_Pallet = false;
                     return;
                 }
 
