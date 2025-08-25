@@ -52,6 +52,8 @@ public class clsBeStock_rec implements Cloneable{
     @Element(required=false) public double Cantidad_Nav=0;
     @Element(required=false) public boolean Pallet_No_Estandar= false;
     @Element(required=false) public int IdProductoTallaColor = 0;
+    @Element(required=false) public String Talla = "";
+    @Element(required=false) public String Color = "";
 
     public clsBeStock_rec() {
     }

@@ -47,7 +47,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String Correlativo;
     @Element(required=false) public int IdDespachoEnc;
 
-    @Element(required=false) public clsBeTrans_oc_detList DetalleOCXml = new clsBeTrans_oc_detList();
+    @Element(required=false) public clsBeTrans_oc_detList DetalleOC = new clsBeTrans_oc_detList();
     @SerializedName("DetalleOC") private List<clsBeTrans_oc_det> DetalleOCJson = new ArrayList<>();
 
     @Element(required=false) public clsBeTrans_oc_det_loteList DetalleLotes=new clsBeTrans_oc_det_loteList();
@@ -76,8 +76,8 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdCampana=0;
 
     public clsBeTrans_oc_detList getDetalleOC() {
-        if (DetalleOCXml != null && DetalleOCXml.items != null && !DetalleOCXml.items.isEmpty()) {
-            return DetalleOCXml;
+        if (DetalleOC != null && DetalleOC.items != null && !DetalleOC.items.isEmpty()) {
+            return DetalleOC;
         } else {
             clsBeTrans_oc_detList wrapper = new clsBeTrans_oc_detList();
             wrapper.items = DetalleOCJson;
@@ -86,14 +86,14 @@ public class clsBeTrans_oc_enc {
     }
 
     public void setDetalleOC(clsBeTrans_oc_detList value) {
-        DetalleOCXml = value;
+        DetalleOC = value;
         DetalleOCJson = (value != null) ? value.items : new ArrayList<>();
     }
 
     public void syncDetalleOCToXml() {
-        if ((DetalleOCXml == null || DetalleOCXml.items == null || DetalleOCXml.items.isEmpty()) && DetalleOCJson != null) {
-            DetalleOCXml = new clsBeTrans_oc_detList();
-            DetalleOCXml.items = DetalleOCJson;
+        if ((DetalleOC == null || DetalleOC.items == null || DetalleOC.items.isEmpty()) && DetalleOCJson != null) {
+            DetalleOC = new clsBeTrans_oc_detList();
+            DetalleOC.items = DetalleOCJson;
         }
     }
 

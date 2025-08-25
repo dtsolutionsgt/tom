@@ -152,7 +152,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
-            android:textSize="18sp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             android:visibility="visible" />
@@ -173,7 +172,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
-            android:textSize="18sp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             android:visibility="visible" />

@@ -2933,6 +2933,7 @@ public class frm_recepcion_datos extends PBase {
             gBeStockRec.Regularizado = false;
             gBeStockRec.Fecha_regularizacion = "";
 
+
             pListBeStockRec.items.add(gBeStockRec);
 
             if (pListBeStockSeRec.items!=null){
@@ -5150,6 +5151,9 @@ public class frm_recepcion_datos extends PBase {
                     BeStock_rec.Presentacion.IdPresentacion = IdPreseSelect;
                 }
 
+                BeStock_rec.Talla = cmbTalla.getSelectedItem().toString();
+                String color = cmbColor.getSelectedItem().toString();
+                BeStock_rec.Color = color.length() >= 3 ? color.substring(0, 3) : color;
                 pListBeStockRec.items.add(BeStock_rec);
                 pIndiceListaStock = pListBeStockRec.items.size()-1;
 
