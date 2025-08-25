@@ -98,6 +98,7 @@ public class frm_Packing extends PBase {
     private int pUbicacionLP=0;
     private String pNombreUbicacionLP="";
     private boolean Existe_Lp=false, imprimirDesdeBoton = false;
+    private String cvNombreEstado = "";
 
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
     public static clsBeBodega_ubicacion cUbicDest = new clsBeBodega_ubicacion();
@@ -436,6 +437,7 @@ public class frm_Packing extends PBase {
             cvLote = "";
             cvPresID = 0;
             cvEstOrigen = 0;
+            cvNombreEstado = "";
             cvProdID = 0;
             cvVence = "01/01/1900";
             tmpLicencia = "";
@@ -1007,6 +1009,7 @@ public class frm_Packing extends PBase {
 
                     cmbEstado.setSelection(0);
                     cvEstEst = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0]);
+                    cvNombreEstado = String.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[1]);
                     muestraCantidad();
 
                 }
@@ -1242,7 +1245,7 @@ public class frm_Packing extends PBase {
                     double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
                     boolean vPaletizado = ListBeProductoPresentacion.items.get(0).getEsPallet();
 
-                    if (vPaletizado ){
+                    if (vPaletizado || (IdPresCmb>0 && cvPresID==0 ) ){
                         if (!gl.Permitir_Decimales){
                             resto = vCantidadAUbicar % vFactor;
                             if (resto!=0){
@@ -1426,7 +1429,7 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.IdEmpresa = gl.IdEmpresa;
                 gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
                 gMovimientoDet.IdTransaccion = 1;
-                gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
+                gMovimientoDet.IdPropietarioBodega = cvPropID;
                 gMovimientoDet.IdProductoBodega = obj.Stock.IdProductoBodega;
                 gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion_Anterior;
                 gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
@@ -1468,7 +1471,7 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Fecha_vence = app.strFechaXMLCombo("01/01/1900");
                 }
 
-                gMovimientoDet.Fecha = du.getFechaActual();
+                gMovimientoDet.Fecha = du.getFullDate();
 
                 if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
                     gMovimientoDet.Barra_pallet =txtNuevoLp.getText().toString();
@@ -1476,9 +1479,9 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Barra_pallet = "";
                 }
 
-                gMovimientoDet.Hora_ini =  du.getFechaActual();
-                gMovimientoDet.Hora_fin =  du.getFechaActual();
-                gMovimientoDet.Fecha_agr =  du.getFechaActual();
+                gMovimientoDet.Hora_ini =  du.getFullDate();
+                gMovimientoDet.Hora_fin =  du.getFullDate();
+                gMovimientoDet.Fecha_agr =  du.getFullDate();
                 gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
                 gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
                 gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
@@ -1604,7 +1607,7 @@ public class frm_Packing extends PBase {
 
             }
 
-            gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Fecha = du.getFullDate();
 
             if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
                 gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
@@ -1612,9 +1615,9 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.Barra_pallet = "";
             }
 
-            gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Hora_ini =  du.getFullDate();
+            gMovimientoDet.Hora_fin =  du.getFullDate();
+            gMovimientoDet.Fecha_agr =  du.getFullDate();
             gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
@@ -2670,9 +2673,9 @@ public class frm_Packing extends PBase {
 
         try{
 
-            vLote = BeProductoUbicacionOrigen.Lote;
-            vFechaVence = du.convierteFechaMostrar(BeProductoUbicacionOrigen.FechaVence.toString());
-            vEstadoProducto = String.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[1]);
+            vLote = (cvLote==null?"":cvLote);
+            vFechaVence = du.convierteFechaMostrar(du.convierteFechaDiagonal(cvVence));
+            vEstadoProducto = cvNombreEstado;
 
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
 
@@ -2751,6 +2754,37 @@ public class frm_Packing extends PBase {
                                             "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                     BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
                                     "$"+NuevoLp);
+                        }else if(BeProductoUbicacionOrigen.IdTipoEtiqueta == 10){
+
+                            //nuevo formato impresión de etiqueta Licencia para Killios .
+                            zpl = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW609\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT430,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                            "^FO2,40^GB560,5,5^FS\n" +
+                                            "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
+                                            "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
+                                            "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                            "^FT110,145^A0I,40,20^FH^FD%8$s^FS\n" +
+                                            "^FT110,200^A0I,40,20^FH^FDV.%7$s^FS\n" +
+                                            "^FT110,255^A0I,40,18^FH^FDL.%6$s^FS\n" +
+                                            "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                            "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                            "^FT560,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                            "^FO2,340^GB560,14,14^FS\n" +
+                                            "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
+                                            "^FD%4$s^FS\n" +
+                                            "^PQ1,0,1,Y\n" +
+                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    BeProductoUbicacionOrigen.Codigo + " - " + BeProductoUbicacionOrigen.Nombre,
+                                    "$" + NuevoLp,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                    vLote, vFechaVence.replace("-","/"),
+                                    vEstadoProducto);
+
                         }
 
                         if (!zpl.isEmpty()){
@@ -2763,37 +2797,6 @@ public class frm_Packing extends PBase {
 
                         // Close the connection to release resources.
                         printerIns.close();
-
-                    }else if(BeProductoUbicacionOrigen.IdTipoEtiqueta == 10){
-
-                        //nuevo formato impresión de etiqueta Licencia para Killios .
-                        zpl = String.format("^XA\n" +
-                                        "^MMT\n" +
-                                        "^PW609\n" +
-                                        "^LL0406\n" +
-                                        "^LS0\n" +
-                                        "^FT430,21^A0I,20,14^FH^FD%5$s^FS\n" +
-                                        "^FO2,40^GB560,5,5^FS\n" +
-                                        "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
-                                        "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
-                                        "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
-                                        "^FT110,145^A0I,40,20^FH^FD%8$s^FS\n" +
-                                        "^FT110,200^A0I,40,20^FH^FDV.%7$s^FS\n" +
-                                        "^FT110,255^A0I,40,18^FH^FDL.%6$s^FS\n" +
-                                        "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
-                                        "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
-                                        "^FO2,340^GB560,14,14^FS\n" +
-                                        "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
-                                        "^FD%4$s^FS\n" +
-                                        "^PQ1,0,1,Y\n" +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega,
-                                gl.gNomEmpresa,
-                                BeProductoUbicacionOrigen.Codigo + " - " + BeProductoUbicacionOrigen.Nombre,
-                                "$" + NuevoLp,
-                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                vLote, vFechaVence.replace("-","/"),
-                                vEstadoProducto);
 
                     }else{
                         mu.msgbox("No se definió licencia, no se puede imprimir.");

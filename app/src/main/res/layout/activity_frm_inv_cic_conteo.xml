@@ -28,7 +28,8 @@
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:inputType="textPersonName"
+            android:inputType="text"
+            android:singleLine="true"
             android:paddingBottom="10dp" />
 
         <ImageView

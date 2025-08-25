@@ -248,7 +248,8 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible" />
+                        android:visibility="gone"
+                        tools:visibility="gone" />
 
                     <TextView
                         android:id="@+id/lblEUmBas"
@@ -261,7 +262,8 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible" />
+                        android:visibility="gone"
+                        tools:visibility="gone" />
 
                     <TextView
                         android:id="@+id/lblEPresentacion"
@@ -381,7 +383,8 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible" />
+                        android:visibility="gone"
+                        tools:visibility="gone" />
 
                     <TextView
                         android:id="@+id/lblEClasificacion"
@@ -537,7 +540,8 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible" />
+                        android:visibility="gone"
+                        tools:visibility="gone" />
 
                     <TextView
                         android:id="@+id/lblEPresentacion2"
@@ -786,7 +790,8 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible" />
+                        android:visibility="gone"
+                        tools:visibility="gone" />
 
                     <TextView
                         android:id="@+id/lblEPresentacion3"

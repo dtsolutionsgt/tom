@@ -57,6 +57,10 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public String Nombre_Completo_Destino = "";
     @Element(required=false) public String Ubicacion_Nueva = "";
     @Element(required=false) public String EstadoNuevo = "";
+    @Element(required=false) public double Nuevo_Stock = 0;
+    @Element(required=false) public boolean Contado = false;
+    @Element(required=false) public boolean Regularizar = true;
+    @Element(required=false) public double Cantidad_Reservada_UMBas = 0;
 
     public clsBeTrans_inv_ciclico(){}
 
@@ -67,7 +71,7 @@ public class clsBeTrans_inv_ciclico {
                                   String Fec_Mod, String Ubicacion, String Tramo, String Estado, String Codigo, String Presentacion,
                                   String UnidadMedida, String Producto, String Operador, int IdPropietario, int IdClasificacion, int IdFamilia,
                                   int IdUnidadMedida, int IdTramo, double Recepciones, double Despachos, int IdProducto, double EntradasSalidas,
-                                  String TipoProducto, double Factor, int IdBodega
+                                  String TipoProducto, double Factor, int IdBodega, boolean Contado
         ){
 
         this.IdInvCiclico=IdInvCiclico;
@@ -118,7 +122,7 @@ public class clsBeTrans_inv_ciclico {
         this.TipoProducto = TipoProducto;
         this.Factor = Factor;
         this.IdBodega = IdBodega;
-
+        this.Contado = Contado;
     }
 
     public int getidinvciclico() {

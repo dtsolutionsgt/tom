@@ -100,14 +100,22 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             //AT 20211221 Ya no se crea el encabezado unicamente se agrega la información
             holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
             holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
-            holder.lblUM.setText(BeListStock.get(position).UM  +"");
-            holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
-            holder.lblPres.setText(BeListStock.get(position).Pres  +"");
-            holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
-            holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
-            holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
-            holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
-            holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
+
+            //#GT 23072025: la linea puede tener presentacion 0 o ir vacia si fuera la linea de sumatoria.
+            //#AT 20250723: Cambie esto BeListStock.get(position).Pres.equals("0") || BeListStock.get(position).Pres.isEmpty()
+            // a esto BeListStock.get(position).IdPresentacion != 0
+            if (BeListStock.get(position).IdPresentacion != 0) {
+                holder.lblPres.setText(BeListStock.get(position).Pres + "");
+                holder.lblExistPres.setText(BeListStock.get(position).ExistPres + "");
+                holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
+                holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
+            } else {
+                holder.lblPres.setText(BeListStock.get(position).UM);
+                holder.lblExistPres.setText(BeListStock.get(position).ExistUMBAs  +"");
+                holder.lblResPres.setText(BeListStock.get(position).ReservadoUMBAs+"");
+                holder.lblDispPres.setText(BeListStock.get(position).DisponibleUMBas+"");
+            }
+
             holder.lblIdStock.setText(""+BeListStock.get(position).IdStock);
             holder.lblLote.setText(BeListStock.get(position).Lote  +"");
             holder.lblVence.setText(BeListStock.get(position).Fecha_Vence  +"");

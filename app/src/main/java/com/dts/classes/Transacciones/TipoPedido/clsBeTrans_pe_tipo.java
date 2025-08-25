@@ -34,6 +34,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Mover_Producto_Zona_Muelle=false;
     @Element(required=false) public boolean Escanear_Muelle_Picking=false;
     @Element(required=false) public boolean Transferir_Ubicacion=false;
+    @Element(required=false) public boolean Genera_Guia_Remision=false;
 
 
     public clsBeTrans_pe_tipo() {

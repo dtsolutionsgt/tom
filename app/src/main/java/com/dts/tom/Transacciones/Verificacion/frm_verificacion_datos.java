@@ -1030,13 +1030,17 @@ public class frm_verificacion_datos extends PBase {
                                    "pActivo",true);
                         break;
                     case 3:
-                        callMethod("Actualiza_Cant_Peso_Verificacion",
-                                   "pBePickingUbicList",pSubListPickingU.items,
-                                   "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
-                                   "pCantidad",pCantidad,
-                                   "pPeso",pPeso,
-                                   "pTipo", pTipo,
-                                   "pIdPedidoEnc", gl.pIdPedidoEnc);
+                        if (gl.pIdPedidoEnc!=0){
+                            callMethod("Actualiza_Cant_Peso_Verificacion",
+                                    "pBePickingUbicList",pSubListPickingU.items,
+                                    "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
+                                    "pCantidad",pCantidad,
+                                    "pPeso",pPeso,
+                                    "pTipo", pTipo,
+                                    "pIdPedidoEnc", gl.pIdPedidoEnc);
+                        }else{
+                            msgbox("Pedido no puede ser 0");
+                        }
                         break;
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);

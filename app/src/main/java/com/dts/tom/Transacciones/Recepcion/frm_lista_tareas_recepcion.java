@@ -292,7 +292,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_IdOrdenCompraEnc_By_Licencia","pLicenciaIngreso",txtTarea.getText().toString());
                         break;
                     case 7:
-                        callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        //callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethodJsonPost("GetSingleRecJson",
+                                "pIdRecepcionEnc", gl.gIdRecepcionEnc,
+                                "CodigoProducto", gl.Codigo_Producto);
+
                         break;
                     case 8:
                         callMethod("Get_ListOrdenCompraEnc_By_Codigo_Producto",
@@ -352,7 +356,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processIdOrdenCompra();
                     break;
                 case 7:
-                    processIdRecepcion();
+                    //processIdRecepcion();
+                    processIdRecepcionJson();
                     break;
                 case 8:
                     processListaOrdenCompra();
@@ -774,6 +779,43 @@ public class frm_lista_tareas_recepcion extends PBase {
             mu.msgbox("processIdRecepcion: "+e.getMessage());
         }
     }
+
+    private void processIdRecepcionJson() {
+        try {
+            // Resultado JSON como String
+            String json = ws.xmlresult;
+
+            Log.d("WS_JSON", json);
+
+            // Mapear directamente al objeto clsBeTrans_re_enc
+            clsBeTrans_re_enc recepcion = new Gson().fromJson(json, clsBeTrans_re_enc.class);
+
+            // Validación simple
+            if (recepcion == null) throw new Exception("Respuesta vacía del servidor");
+
+            // Asignar objeto al global
+            gl.gBeRecepcion = recepcion;
+
+            // Actualizar variables globales
+            gl.IdPropietario = recepcion.PropietarioBodega.getIdPropietario();
+            gl.pTipoIngreso = recepcion.OrdenCompraRec.OC.TipoIngreso;
+            gl.gMostrarCantidadEsperada = recepcion.Mostrar_Cantidad_Esperada;
+
+            // Sincronizar la estructura XML (opcional si ya usas 'items' directamente)
+            if (recepcion.OrdenCompraRec != null && recepcion.OrdenCompraRec.OC != null) {
+                //recepcion.OrdenCompraRec.OC.DetalleOC.syncDetalleOCToXML();
+            }
+
+            // Continuar con la recepción
+            txtTarea.setText("");
+            startActivity(new Intent(this, frm_list_rec_prod.class));
+
+        } catch (Exception e) {
+            mu.msgbox("processIdRecepcionJson: " + e.getMessage());
+        }
+    }
+
+
 
     //#CKFK20240605 Agregué la funcionalidad de filtrar la orden de compra por código de producto
     private  void processListaOrdenCompra() {

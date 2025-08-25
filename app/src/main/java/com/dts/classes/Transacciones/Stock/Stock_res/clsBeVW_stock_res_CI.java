@@ -39,6 +39,26 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Codigo_Color = "";
   @Element(required=false) public String CodigoSKU = "";
   public  clsBeVW_stock_res_CI() {
+  @Element(required=false) public int IdUbicacion_anterior=0;
+  public
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  clsBeVW_stock_res_CI() {
   }
 
   public clsBeVW_stock_res_CI(String Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,

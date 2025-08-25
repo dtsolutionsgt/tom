@@ -2,20 +2,28 @@ package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -26,8 +34,12 @@ import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_rec
 import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
 
@@ -54,13 +66,14 @@ public class frm_inv_cic_conteo extends PBase {
 
     //Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
-    private final ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
+    private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private final ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
     private final clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
     private Object item;
     private clsBeProducto BeProducto;
     public static boolean NuevoConteo = false;
+    private String ultimoCodigoEscaneado = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,31 +127,23 @@ public class frm_inv_cic_conteo extends PBase {
         try {
 
             txtBuscFiltro.setOnKeyListener((v, keyCode, event) -> {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_ENTER:
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        String texto = txtBuscFiltro.getText().toString().trim();
 
-                            if (txtBuscFiltro.getText().toString().isEmpty())
-                            {
-                                toast("No ingreso una Ubicación!");
+                        Log.d("DEBUG_UBIC", "Escaneado: [" + texto + "]");
 
-                            }else{
-                                adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
-                                listCiclico.setAdapter(adapter_ciclico);
+                        if (!texto.isEmpty()) {
+                            procesarEscaneoInteligente(texto);
+                            //ListaFiltrada();  // Sigue usando parseInt adentro
+                        } else {
+                            toast("No ingresó una Ubicación!");
+                        }
 
-                                if(chkPendientes){
+                    }, 200);
 
-                                    ListaFiltrada();
-
-                                }else {
-
-                                    ListaFiltrada2();
-
-                                }
-
-                            }
-                    }
+                    return true;
                 }
                 return false;
             });
@@ -256,14 +261,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                String fechaVenceStock = DT.getString(9).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(9));
+                                String fechaVenceStock = DT.getString(9).contains("1900-01-01T00:00:00") ? "01-01-1900" : du.convierteFechaMostrar(DT.getString(9));
                                 data_rec.Fecha_Vence_Stock =  fechaVenceStock;
                             }else{
                                 data_rec.Fecha_Vence_Stock = "";
                             }
 
                             if (DT.getString(10)!=null){
-                                String fechaVence = DT.getString(10).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(10));
+                                String fechaVence = DT.getString(10).contains("1900-01-01T00:00:00") ? "01-01-1900" : du.convierteFechaMostrar(DT.getString(10));
                                 data_rec.Fecha_Vence = fechaVence;
                             }else{
                                 data_rec.Fecha_Vence = "";
@@ -315,7 +320,6 @@ public class frm_inv_cic_conteo extends PBase {
                         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
                         listCiclico.setAdapter(adapter_ciclico);
 
-
                     }
                 }
             }
@@ -363,53 +367,256 @@ public class frm_inv_cic_conteo extends PBase {
         mu.msgbox("processReConteos:"+e.getMessage());
     }
 
-}
+   }
 
+    private String CodigoEscaneado = null;
+    private String UbicacionEscaneada = "";
+    private List<clsBe_inv_reconteo_data> tmp = new ArrayList<>();
+
+    public boolean esNumeroEntero(String valor) {
+        if (valor == null || valor.isEmpty()) return false;
+
+        valor = valor.replaceAll("[^\\p{Print}]", "").trim();
+        return valor.matches("-?\\d+");
+    }
+
+    private void procesarEscaneoInteligente(String termino) {
+        try {
+            tmp.clear();
+            termino = termino.trim();
+
+            if (termino.isEmpty()) {
+                toast("Por favor ingrese una ubicación o código válido.");
+            }
+
+            //Tipo 1 = Solicita código
+            //Tipo 2 = Solicita ubicación
+            if (esNumeroEntero(termino)) {
+                if (termino.length() == 5) {
+                   termino =  termino.replaceFirst("^0+(?!$)", "");
+                }
+
+                UbicacionEscaneada = termino;
+                tmp = buscarPorUbicacion(UbicacionEscaneada);
+
+                if (tmp.size() > 0) {
+                    if (tmp.size() == 1) {
+                        cargarRegistro(tmp.get(0));
+                    } else {
+                        mostrarDialogo(1);
+                    }
+                } else {
+                    CodigoEscaneado = termino;
+                    tmp = buscarPorCodigo(CodigoEscaneado);
+
+                    if (tmp.size() == 1 ) {
+                        cargarRegistro(tmp.get(0));
+                    } else {
+                        if (tmp.size()>1){
+                            mostrarDialogo(2);
+                        }else if(tmp.size()==0){
+                            msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+                        }
+                    }
+                }
+            } else {
+                CodigoEscaneado = termino;
+                tmp = buscarPorCodigo(CodigoEscaneado);
+
+                if (tmp.size() == 1) {
+                    cargarRegistro(tmp.get(0));
+                } else {
+                    if (tmp.size()>1){
+                        mostrarDialogo(2);
+                    }else if(tmp.size()==0){
+                        msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorUbicacion(String ubicacion) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (String.valueOf(r.NoUbic).equals(ubicacion)) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorCodigo(String codigo) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (r.getCodigo().equalsIgnoreCase(codigo)) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private List<clsBe_inv_reconteo_data> buscarPorCodigoUbicacion(String codigo, String ubicacion) {
+        List<clsBe_inv_reconteo_data> resultados = new ArrayList<>();
+        for (clsBe_inv_reconteo_data r : data_list) {
+            if (r.getCodigo().equalsIgnoreCase(codigo) && String.valueOf(r.NoUbic).equalsIgnoreCase(ubicacion)) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    private void procesarCodigoUbicacion() {
+        tmp = buscarPorCodigoUbicacion(CodigoEscaneado, UbicacionEscaneada);
+
+        if (!tmp.isEmpty()) {
+            clsBe_inv_reconteo_data tmpItem = tmp.get(0);
+            cargarRegistro(tmpItem);
+            toast("Cargando datos del IdStock: " + tmpItem.IdStock);
+        } else {
+            toast("No se encontraron registros con ese código y ubicación.");
+        }
+    }
+
+    private void cargarRegistro(clsBe_inv_reconteo_data item) {
+        try {
+            gl.inv_ciclico = item;
+            Busqueda = true;
+
+            execws(4);
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void mostrarDialogo(int Tipo) {
+        try {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Inv. cíclico");
+            alert.setIcon(R.drawable.scan);
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.frm_filtro_inv_ciclico, null);
+            alert.setView(dialogView);
+
+            TextView lblTitulo = dialogView.findViewById(R.id.lblTitulo);
+            EditText input = dialogView.findViewById(R.id.txtEntrada);
+
+            String termino = Tipo == 1 ? "código de producto":"ubicación";
+            lblTitulo.setText(String.format("Se encontraron ("+tmp.size()+") registros, por favor ingrese %s", termino));
+
+            if (Tipo == 1) {
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+
+            alert.setNegativeButton("Cancelar", (dialogInterface, which) -> {
+                lista_filtro = new ArrayList<>(buscarPorCodigo(CodigoEscaneado));
+                adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(), lista_filtro);
+                listCiclico.setAdapter(adapter_ciclico);
+                dialogInterface.dismiss();
+            });
+            alert.setPositiveButton("Aceptar", null);
+            AlertDialog dialog = alert.create();
+
+            dialog.setOnShowListener(d -> {
+                Button btnAceptar = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnAceptar.setOnClickListener(v -> {
+                    String valor = input.getText().toString().trim();
+                    procesarValor(valor, termino, Tipo);
+                    dialog.dismiss();
+                });
+            });
+
+            input.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                    String valor = input.getText().toString().trim();
+                    procesarValor(valor, termino, Tipo);
+                    dialog.dismiss();
+                    return true;
+                }
+                return false;
+            });
+
+            dialog.show();
+            showkeyb();
+
+        } catch (Exception e) {
+            addlog("mostrarDialogo", e.getMessage(), "");
+        }
+    }
+
+    private void procesarValor(String valor, String termino, int Tipo) {
+        try {
+            valor = valor.trim();
+
+            if (valor.isEmpty()) {
+                toast("Debe ingresar " + termino);
+            }
+
+            if (Tipo == 2) {
+                if (!esNumeroEntero(valor)) {
+                    toast("Ubicación inválida");
+                }
+                UbicacionEscaneada = valor;
+            } else {
+                CodigoEscaneado = valor;
+            }
+
+            procesarCodigoUbicacion();
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
     private void ListaFiltrada() {
+        int registros = 0;
+        String filtroTexto = txtBuscFiltro.getText().toString().trim();
+        ultimoCodigoEscaneado=filtroTexto;
 
-        Integer registros = 0;
+        if (filtroTexto.isEmpty()) {
+            msgbox("Por favor ingrese una ubicación válida.");
+            return;
+        }
 
-        String evaluar = txtBuscFiltro.getText().toString().trim();
+        int evaluar;
+        try {
+            evaluar = Integer.parseInt(filtroTexto);  // Ok, porque "00030" se convierte a 30
+        } catch (NumberFormatException e) {
+            msgbox("La ubicación debe ser un número válido.");
+            return;
+        }
 
-        //GT 01122020 inicia busqueda en lista por Ubicación
-        for (int i = 0; i < data_list.size(); i++) {
+        clsBe_inv_reconteo_data primeraCoincidencia = null;
 
-            String ubicacion = String.valueOf(data_list.get(i).NoUbic);
-
-            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
-
-                registros = registros+1;
-
-                if (registros==1){
-                    gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+        for (clsBe_inv_reconteo_data item : data_list) {
+            if (item.NoUbic == evaluar && item.cantidad != null && item.cantidad.equals(0.0)) {
+                registros++;
+                if (registros == 1) {
+                    primeraCoincidencia = item;
                 }
             }
         }
 
-        if(registros>1){
+        //txtBuscFiltro.setText("");  // ← ¡Siempre limpia después de escanear!
 
-            //carga la lista con el Filtro Ubicación
+        if (registros > 1) {
             FiltroxUbicacion(evaluar);
-
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
-
-            msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
-
-            txtBuscFiltro.setText("");
-
+            msgbox("La ubicación contiene más códigos de producto, seleccione ahora el código de producto.");
             Busqueda = false;
-
-        }else if(registros==1){
-
+        } else if (registros == 1) {
+            gl.inv_ciclico = primeraCoincidencia;
             Busqueda = true;
-
             execws(4);
-            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
-
-        } else if(registros == 0){
+        } else {
             msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
         }
     }
+
 
     public void FiltroValores() {
         int registros = 0;
@@ -582,6 +789,7 @@ public class frm_inv_cic_conteo extends PBase {
                 data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
                 data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
                 data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
+                data_rec.IdStock = gl.reconteo_list.get(i).IdStock;
                 lista_filtro.add(data_rec);
             }
         }
@@ -593,72 +801,72 @@ public class frm_inv_cic_conteo extends PBase {
         cmdList.setText( count+ "/" + count);
     }
 
-    private void FiltroxUbicacion(String evaluar) {
-
-        clsBe_inv_reconteo_data rec;
-
+    private void FiltroxUbicacion(Integer evaluar) {
         lista_filtro.clear();
 
-        //rec = new clsBe_inv_reconteo_data();
-        //lista_filtro.add(rec);
-
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
+            clsBe_inv_reconteo_data origen = gl.reconteo_list.get(i);
 
-            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).NoUbic);
+            if (origen.NoUbic == evaluar) {
+                clsBe_inv_reconteo_data destino = new clsBe_inv_reconteo_data();
 
-            if (ubicacion_lista.equals(evaluar)){
+                destino.index = origen.index;
+                destino.idinventarioenc = origen.idinventarioenc;
+                destino.idinvreconteo = origen.idinvreconteo;
+                destino.IdInventarioCiclico =origen.IdInventarioCiclico;
 
-                data_rec = new clsBe_inv_reconteo_data();
+                destino.NoUbic = origen.NoUbic;
+                destino.IdProductoBodega = origen.IdProductoBodega;
+                destino.IdProductoEstado = origen.IdProductoEstado;
+                destino.IdPresentacion = origen.IdPresentacion;
+                destino.Codigo = origen.Codigo;
+                destino.Producto_nombre = origen.Producto_nombre;
+                destino.Ubic_nombre = origen.Ubic_nombre;
+                destino.Pres = origen.Pres;
+                destino.UMBas = origen.UMBas;
+                destino.cantidad = origen.cantidad;
+                destino.Lote = origen.Lote;
+                destino.Lote_stock = origen.Lote_stock;
+                destino.Peso = origen.Peso;
+                destino.Fecha_Vence = origen.Fecha_Vence;
+                destino.Fecha_Vence_Stock = origen.Fecha_Vence_Stock;
+                destino.control_peso = origen.control_peso;
+                destino.Conteo = origen.Conteo;
+                destino.Ubic_nombre = origen.Ubic_nombre;
+                destino.Estado = origen.Estado;
+                destino.Factor = origen.Factor;
+                destino.idPresentacion_nuevo = origen.idPresentacion_nuevo;
+                destino.IdProductoEst_nuevo = origen.IdProductoEst_nuevo;
+                destino.Licence_plate = origen.Licence_plate;
+                destino.Cant_Stock = origen.Cant_Stock;
+                destino.IdUbicacion_nuevo = origen.IdUbicacion_nuevo;
+                destino.Nuevo_Estado = origen.Nuevo_Estado;
+                destino.IdStock = origen.IdStock;
 
-                data_rec.index = gl.reconteo_list.get(i).index;
+                lista_filtro.add(destino);
 
-                data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
-                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
-
-                data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
-                data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
-                data_rec.IdProductoEstado = gl.reconteo_list.get(i).IdProductoEstado;
-                data_rec.IdPresentacion = gl.reconteo_list.get(i).IdPresentacion;
-                data_rec.Codigo = gl.reconteo_list.get(i).Codigo;
-                data_rec.Producto_nombre = gl.reconteo_list.get(i).Producto_nombre;
-                data_rec.Pres = gl.reconteo_list.get(i).Pres;
-                data_rec.UMBas = gl.reconteo_list.get(i).UMBas;
-                data_rec.cantidad = gl.reconteo_list.get(i).cantidad;
-                data_rec.Lote = gl.reconteo_list.get(i).Lote;
-                data_rec.Lote_stock = gl.reconteo_list.get(i).Lote_stock;
-                data_rec.Peso = gl.reconteo_list.get(i).Peso;
-                data_rec.Fecha_Vence =  gl.reconteo_list.get(i).Fecha_Vence;
-                data_rec.control_peso = gl.reconteo_list.get(i).control_peso;
-                data_rec.Conteo = gl.reconteo_list.get(i).Conteo;
-                data_rec.Ubic_nombre = gl.reconteo_list.get(i).Ubic_nombre;
-                data_rec.Estado = gl.reconteo_list.get(i).Estado;
-                data_rec.Factor = gl.reconteo_list.get(i).Factor;
-                data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
-                data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
-                data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
-                lista_filtro.add(data_rec);
             }
         }
 
-        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
+        adapter_ciclico = new list_adapt_consulta_ciclico(getApplicationContext(), lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
-        int count =data_list.size();
-        cmdList.setText( count+ "/" + count);
+        int count = data_list.size();
+        cmdList.setText(count + "/" + count);
     }
 
     private void ListaFiltrada2() {
         try {
             Integer registros = 0;
 
-            String evaluar = txtBuscFiltro.getText().toString().trim();
+            Integer evaluar = Integer.valueOf(txtBuscFiltro.getText().toString().trim());
 
             //GT 01122020 inicia busqueda en lista por Ubicación
             for (int i = 0; i < data_list.size(); i++) {
 
-                String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+                Integer ubicacion = Integer.valueOf(data_list.get(i).NoUbic);
 
-                if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0) {
+                if (ubicacion==evaluar && data_list.get(i).cantidad > 0) {
 
                     registros = registros + 1;
 
@@ -831,7 +1039,8 @@ public class frm_inv_cic_conteo extends PBase {
             gl.lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
 
             if(gl.lista_estados !=null){
-                txtBuscFiltro.setText("");
+                //#CKFK20250730 Puse esto en comentario para que no me limpie la ubicación
+                //txtBuscFiltro.setText("");
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }else{
                 msgbox("No hay estados para asignar al producto");
@@ -844,6 +1053,10 @@ public class frm_inv_cic_conteo extends PBase {
     public void limpiar(View view) {
         txtBuscFiltro.setText("");
         txtBuscFiltro.requestFocus();
+
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+        listCiclico.setAdapter(adapter_ciclico);
+        adapter_ciclico.notifyDataSetChanged();
     }
 
     public void agregarNuevoConteo(View view) {
@@ -1029,7 +1242,7 @@ public class frm_inv_cic_conteo extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
 
                     gl.nuevo_producto_cic = txtBuscFiltro.getText().toString().trim();
-                    txtBuscFiltro.setText("");
+                   // txtBuscFiltro.setText("");
                     gl.cerrarActividad2=false;
                     startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
                 }
@@ -1061,7 +1274,7 @@ public class frm_inv_cic_conteo extends PBase {
             dialog.setPositiveButton("Si", (dialog1, which) -> {
 
                 NuevoConteo = true;
-                String u = txtBuscFiltro.getText().toString();
+                String u = ultimoCodigoEscaneado;
 
                 if  (isNumeric(u)) {
                     gl.ubicacionInv = Integer.valueOf(u);

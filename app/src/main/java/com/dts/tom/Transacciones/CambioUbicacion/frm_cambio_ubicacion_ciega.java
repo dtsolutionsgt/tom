@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.InputType;
@@ -367,6 +368,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    private long ultimoEnter = 0;
     private void setHandlers() {
 
         cmbPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -673,6 +675,58 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
                 //#GT18012025: mejora en proceso para evitar multiple Enter manual o por Trigger de la pistola
+                Log.e("EnterKeyPress", " procesando: " + procesando);
+
+                // Control de tiempo para evitar Enter sostenido (debounce)
+                long ahora = System.currentTimeMillis();
+                if (ahora - ultimoEnter < 800) {
+                    Log.d("EnterKeyPress", "Ignorado por debounce");
+                    return true;
+                }
+                ultimoEnter = ahora;
+
+                if (procesando) {
+                    Log.e("EnterKeyPress", " rechazo: " + intentos[0]);
+                    return true;
+                } else {
+                    intentos[0] = 0;
+                    Log.d("EnterKeyPress", "Intento: " + intentos[0]);
+                }
+
+                intentos[0]++;
+                procesando = true; // Bloquea nuevos intentos
+
+                String ubicDestino = txtUbicDestino.getText().toString();
+                //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor original
+                if (ubicDestino.isEmpty()) {
+                    toast("Debe ingresar la ubicación destino");
+                    procesando = false; // Restablece la variable si hay un error
+                    return true;
+                }
+
+                //#GT18012025: valida que el proceso se ejecuta una vez, las demas serán rechazadas.
+                if (intentos[0] == 1) {
+                    Log.d("EnterKeyPress", " proceso: " + intentos[0]);
+                    validaDestino(); // Llama a la función de validación
+                } else {
+                    Log.d("EnterKeyPress", " rechazo2: " + intentos[0]);
+                }
+
+                // Reinicia la bandera procesando después de un pequeño delay
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    procesando = false;
+                }, 1000); // 1 segundo
+
+                return true;
+            }
+
+            return false;
+        });
+
+        /*txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                //#GT18012025: mejora en proceso para evitar multiple Enter manual o por Trigger de la pistola
                 Log.e("EnterKeyPress",  " procesando: " + procesando );
 
                 if (procesando) {
@@ -684,7 +738,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
                 intentos[0]++;
-                procesando = true; // Bloquea nuevos intentos*/
+                procesando = true; // Bloquea nuevos intentos
 
                 String ubicDestino = txtUbicDestino.getText().toString();
                 //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor original
@@ -704,7 +758,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
             }
             return false;
-        });
+        });*/
 
         txtUbicDestino.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -1395,8 +1449,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
             if (escaneoPallet & productoList != null) {
                 if(cmbEstadoOrigen.getAdapter() != null){
-                    cvEstOrigen = BeStockPallet.IdProductoEstado;
+                    if(productoList.items.size()==1){
+                        cvEstOrigen = BeStockPallet.IdProductoEstado;
+                    }
                     if (cmbEstadoOrigen.getAdapter().getCount() == 1) {
+                        cvEstOrigen=Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
                         cmbEstadoOrigen.setEnabled(false);
                     }
                 }else{
@@ -2286,7 +2343,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         } catch (Exception e) {
             progress.cancel();
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName() + " . " + e.getMessage());
         }
     }
 
@@ -2307,7 +2365,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
-            msgbox(new Object() .getClass().getEnclosingMethod().getName() +" ."+ e.getMessage());
+            msgbox(Object.class.getEnclosingMethod().getName() +" ."+ e.getMessage());
         }
     }
 
@@ -3295,7 +3353,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
                 txtCodigoPrd.requestFocus();
                 //Get_Stock_By_Lic_Plate
-                execws(5);
+               execws(5);
+               // execws(6);
             }else{
                 progress.cancel();
                 mu.msgbox("Licencia no existe");
@@ -3758,27 +3817,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.cambioubic);
+            dialog.setNeutralButton("OK", (dialog1, which) -> {
+                cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
 
-            dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
-                    lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
-
-                    //#CKFK20250118 Coloqué esto en comentario para que permita hacer el cambio de ubicación en el cambio de estado
-                    /*if(gl.modo_cambio==2 && !vProcesar){
-                        progress.cancel();
-                        cmbEstadoDestino.requestFocus();
-                    }else{*/
-                        datosOk();
-                    //}
-                }
+                //#CKFK20250118 Coloqué esto en comentario para que permita hacer el cambio de ubicación en el cambio de estado
+                /*if(gl.modo_cambio==2 && !vProcesar){
+                    progress.cancel();
+                    cmbEstadoDestino.requestFocus();
+                }else{*/
+                    datosOk();
+                //}
             });
 
             dialog.show();

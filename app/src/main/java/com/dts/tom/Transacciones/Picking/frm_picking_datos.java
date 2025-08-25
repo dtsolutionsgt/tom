@@ -467,6 +467,11 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
+            lblLicPlate.setOnLongClickListener(v -> {
+                String licencia = lblLicPlate.getText().toString();
+                txtLicencia.setText(licencia);
+                return true;
+            });
 
         } catch (Exception e) {
             mu.msgbox("setHandlers:" + e.getMessage());
@@ -848,11 +853,11 @@ public class frm_picking_datos extends PBase {
                         if ( confirmar_codigo_en_picking ){
 
                             //#EJC20220502 / Copiado de >  AT20220428 Se llama a la funcion ProcesaLicUbic si la licencia ingresada es diferente
-                            if (!gBePickingUbic.Lic_plate.equals(pLP)) {
+                            if (!gBePickingUbic.Lic_plate.toUpperCase().equals(pLP.toUpperCase())) {
                                 //#GT14012025: aqui valida si existe Enter en input de LP
                                 ProcesaLicUbic();
                             }else{
-                                if (gBePickingUbic.Lic_plate.equals(pLP)){
+                                if (gBePickingUbic.Lic_plate.toUpperCase().equals(pLP.toUpperCase())){
                                     PressEnterLp = true;
                                     Continua_procesando_barra();
                                 }else{
@@ -885,9 +890,10 @@ public class frm_picking_datos extends PBase {
 
         if(!pLP.isEmpty() && !pLP.equals("0")){
 
-            List AuxList = stream(plistPickingUbi.items).where(c ->c.Lic_plate.equalsIgnoreCase(pLP) &&
-                    c.IdUbicacion == selitem.IdUbicacion &&
-                    (c.Cantidad_Recibida < c.Cantidad_Solicitada)).toList();
+            List AuxList = stream(plistPickingUbi.items).where(
+                    c ->c.Lic_plate.equalsIgnoreCase(pLP) &&
+                                             c.IdUbicacion == selitem.IdUbicacion &&
+                                             (c.Cantidad_Recibida < c.Cantidad_Solicitada)).toList();
 
             if (AuxList.size() > 0) {
                 //#AT20220428 Bandera que indica que si encontró datos de la licencia ingresada
@@ -1039,7 +1045,7 @@ public class frm_picking_datos extends PBase {
         try{
 
             //#AT20220428 Se llama a la funcion ProcesaLicUbic si la licencia ingresada es diferente
-            if (!gBePickingUbic.Lic_plate.equals(pLP)) {
+            if (!gBePickingUbic.Lic_plate.toUpperCase().equals(pLP)) {
                 ProcesaLicUbic();
             }
 
@@ -1049,7 +1055,7 @@ public class frm_picking_datos extends PBase {
 
                     if (!gBePickingUbic.Lic_plate.isEmpty()){
 
-                        if (!gBePickingUbic.Lic_plate.equals(pLP)){
+                        if (!gBePickingUbic.Lic_plate.toUpperCase().equals(pLP)){
 
                             if (ListBeStockPalletEscaneado!=null){
 
@@ -1104,7 +1110,7 @@ public class frm_picking_datos extends PBase {
                                             }
 
                                         }else{
-                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                             txtLicencia.setSelectAllOnFocus(true);
                                             txtLicencia.requestFocus();
                                             Log.d("focus: ", "20220502_14");
@@ -1139,7 +1145,7 @@ public class frm_picking_datos extends PBase {
                                                         //Cargar_Datos_Producto_Picking_Consolidado();
                                                         return;
                                                     }else{
-                                                        mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
+                                                        mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate.toUpperCase()+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
                                                         txtLicencia.setSelectAllOnFocus(true);
                                                         txtLicencia.requestFocus();
                                                         Log.d("focus: ", "20220502_16");
@@ -1200,7 +1206,7 @@ public class frm_picking_datos extends PBase {
                                                         return;
                                                     }
                                                 }else{
-                                                    mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                                    mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                                     txtLicencia.setSelectAllOnFocus(true);
                                                     txtLicencia.requestFocus();
                                                     Log.d("focus: ", "20220502_21");
@@ -1212,7 +1218,7 @@ public class frm_picking_datos extends PBase {
 
                                         }else{
 
-                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                             txtLicencia.setSelectAllOnFocus(true);
                                             txtLicencia.requestFocus();
                                             Log.d("focus: ", "20220502_22");
@@ -1284,7 +1290,7 @@ public class frm_picking_datos extends PBase {
 
                     if (!gBePickingUbic.Lic_plate.isEmpty()){
 
-                        if (!gBePickingUbic.Lic_plate.equals(pLP)){
+                        if (!gBePickingUbic.Lic_plate.toUpperCase().equals(pLP)){
 
                             if (ListBeStockPalletEscaneado!=null){
 
@@ -1337,7 +1343,7 @@ public class frm_picking_datos extends PBase {
                                             }
 
                                         }else{
-                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                             txtLicencia.setSelectAllOnFocus(true);
                                             txtLicencia.requestFocus();
                                             Log.d("focus: ", "20220502_28");
@@ -1372,7 +1378,7 @@ public class frm_picking_datos extends PBase {
                                                         //Cargar_Datos_Producto_Picking();
                                                         return;
                                                     }else{
-                                                        mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
+                                                        mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate.toUpperCase()+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
                                                         txtLicencia.setSelectAllOnFocus(true);
                                                         txtLicencia.requestFocus();
                                                         Log.d("focus: ", "20220502_30");
@@ -1433,7 +1439,7 @@ public class frm_picking_datos extends PBase {
                                                         return;
                                                     }
                                                 }else{
-                                                    mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                                    mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                                     txtLicencia.setSelectAllOnFocus(true);
                                                     txtLicencia.requestFocus();
                                                     Log.d("focus: ", "20220502_35");
@@ -1445,7 +1451,7 @@ public class frm_picking_datos extends PBase {
 
                                         }else{
 
-                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
+                                            mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate.toUpperCase());
                                             txtLicencia.setSelectAllOnFocus(true);
                                             txtLicencia.requestFocus();
                                             Log.d("focus: ", "20220502_36");
@@ -2841,7 +2847,7 @@ public class frm_picking_datos extends PBase {
 
                     //AT20240523 Si es reemplazo automatico carga los datos del nuevo picking
                     if (RemAuto) {
-                        txtLicencia.setText(gBePickingUbic.Lic_plate);
+                        txtLicencia.setText(gBePickingUbic.Lic_plate.toUpperCase());
 
                         Procesa_Barra();
                     }
@@ -2854,7 +2860,7 @@ public class frm_picking_datos extends PBase {
 
             //#AT20250218 Carga los datos en automatico
             if (gl.autoLoad) {
-                txtLicencia.setText(gBePickingUbic.Lic_plate);
+                txtLicencia.setText(gBePickingUbic.Lic_plate.toUpperCase());
                 Procesa_Barra();
             }
             ReubicarPickingAereo = false;
@@ -2885,7 +2891,7 @@ public class frm_picking_datos extends PBase {
 
             //AT20240523 Si es reemplazo automatico carga los datos del nuevo picking
             if (RemAuto) {
-                txtLicencia.setText(gBePickingUbic.Lic_plate);
+                txtLicencia.setText(gBePickingUbic.Lic_plate.toUpperCase());
 
                 Procesa_Barra();
             }
@@ -3085,7 +3091,7 @@ public class frm_picking_datos extends PBase {
             if (esValida) {
 
                 String lic = txtLicencia.getText().toString().replace("$", "");
-                msgReemplazoAuto("Reemplazar la licencia " +gBePickingUbic.Lic_plate+" por " + lic);
+                msgReemplazoAuto("Reemplazar la licencia " +gBePickingUbic.Lic_plate.toUpperCase()+" por " + lic);
 
             } else {
                 msgValidaLicencia("Licencia no válida para este producto: \n\n" +

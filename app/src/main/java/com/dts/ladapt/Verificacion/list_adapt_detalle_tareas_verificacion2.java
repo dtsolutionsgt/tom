@@ -112,6 +112,13 @@ public class list_adapt_detalle_tareas_verificacion2 extends BaseAdapter {
             holder.lblArea.setText(""+pListBeTareasVerificacionHH.get(position).NombreArea);
             holder.lblClasificacion.setText(""+pListBeTareasVerificacionHH.get(position).NombreClasificacion);
 
+            if (pListBeTareasVerificacionHH.get(position).IdPresentacion != 0) {
+                holder.lblPresentacion.setText(""+pListBeTareasVerificacionHH.get(position).Nom_Presentacion);
+            } else {
+                holder.lblPresentacion.setText(""+pListBeTareasVerificacionHH.get(position).Nom_Unid_Med);
+            }
+
+            holder.lblUmBas.setVisibility(View.GONE);
             holder.lblPedidoEnc.setVisibility(View.GONE);
             holder.lblPedidoDet.setVisibility(View.GONE);
             holder.lblIdProductoBodega.setVisibility(View.GONE);

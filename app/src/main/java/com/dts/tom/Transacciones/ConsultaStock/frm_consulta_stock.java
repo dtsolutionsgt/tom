@@ -122,7 +122,8 @@ public class frm_consulta_stock extends PBase {
         setHandlers();
         lblTituloForma.setText(gl.CodigoBodega + "-" + gl.gNomBodega + "\n Consulta de Existencias ");
         txtUbic.requestFocus();
-        chkDetalle.setChecked(true);
+        //#AT20250722 Se carga el valor falso, para mostrar la lista consolidada.
+        chkDetalle.setChecked(false);
     }
 
     private void setHandlers() {
@@ -465,7 +466,7 @@ public class frm_consulta_stock extends PBase {
 
                         if (!cod.equals(lpid)) {
 
-                            if (lcnt>1) {
+                            if (lcnt>=1) {
 
                                 item = new clsBeVW_stock_res_CI();
                                 item.Codigo = "Total:";
@@ -583,7 +584,7 @@ public class frm_consulta_stock extends PBase {
                         tResPres += resPres;
                     }
 
-                    if (lcnt>1) {
+                    if (lcnt>=1) {
 
                         item = new clsBeVW_stock_res_CI();
                         item.Codigo = "Total:";

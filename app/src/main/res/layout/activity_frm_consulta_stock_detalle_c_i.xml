@@ -66,6 +66,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trDispUm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">
@@ -127,6 +128,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trResUm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">
@@ -314,6 +316,31 @@
 
                 <TextView
                     android:id="@+id/lblloteCI"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/UbicacionPrevia"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Ubicacion Ant:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lblIdUbicacion_anterior"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center_vertical"

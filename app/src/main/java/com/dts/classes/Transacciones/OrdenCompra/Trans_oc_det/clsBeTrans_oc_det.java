@@ -459,5 +459,12 @@ public class clsBeTrans_oc_det {
         Nombre_Clasificacion =value;
     }
 
+    // Método para sincronizar XML desde JSON
+    public void syncDetalleOCToXML() {
+        // Este método existe como placeholder por compatibilidad entre JSON y XML
+        // En este diseño, 'items' ya contiene la lista necesaria para XML,
+        // así que no se necesita hacer nada a menos que quieras llenar otro campo
+    }
+
 }
 

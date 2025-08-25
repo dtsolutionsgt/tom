@@ -137,8 +137,10 @@ public class list_adapt_detalle_tareas_picking2 extends BaseAdapter {
             holder.lblUmbasDet.setText(BeListTareasHH.get(position).ProductoUnidadMedida);
         }
 
-        if (!BeListTareasHH.get(position).ProductoPresentacion.isEmpty()){
+        if (BeListTareasHH.get(position).IdPresentacion != 0){
             holder.lblPresDet.setText(BeListTareasHH.get(position).ProductoPresentacion);
+        } else {
+            holder.lblPresDet.setText(BeListTareasHH.get(position).ProductoUnidadMedida);
         }
 
         if (BeListTareasHH.get(position).Cantidad_Solicitada>0){

@@ -70,7 +70,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private ListView listDetVeri;
     private EditText txtCodProd;
-    private TextView lblNoDocumento, lblTituloForma;
+    private TextView lblNoDocumento, lblTituloForma, lblELicPlate;
     private LinearLayout encabezado1, encabezado2, encabezado3;
     private ImageView imgReemplazo;
     private RelativeLayout relbot;
@@ -131,12 +131,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
             relbot = findViewById(R.id.relbot);
             chkPendientes = findViewById(R.id.chkPendientes);
 
+            lblELicPlate = findViewById(R.id.lblELicPlate);
+
             if (gl.TipoPantallaVerificacion != 3) {
                 if (mostrar_area) {
                     encabezado2.setVisibility(View.VISIBLE);
                 } else if (VerSinLoteFechaVen) {
                     encabezado3.setVisibility(View.VISIBLE);
                 } else {
+                    if (gl.Agrupar_Sin_Lic_Veri_No_Cons) {
+                        lblELicPlate.setVisibility(View.GONE);
+                    } else {
+                        lblELicPlate.setVisibility(View.VISIBLE);
+                    }
+
                     encabezado1.setVisibility(View.VISIBLE);
                 }
             }
@@ -479,7 +487,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Detalle_By_IdPedidoEnc",
-                                   "pIdPedidoEnc",gl.pIdPedidoEnc);
+                                   "pIdPedidoEnc",gl.pIdPedidoEnc, "pIdBodega", gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_Single_By_IdPedidoEnc",
@@ -687,7 +695,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
-                msgAskFinalizar("Finalizar tarea de verificación");
+
+                //#GT11072025: Ya no es opcional preguntar si cierra o no la tarea
+                //msgAskFinalizar("Finalizar tarea de verificación");
+                FinalizandoVerificacionCompleta();
             }
             orderar();
         } catch (Exception e) {
@@ -724,8 +735,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
-                msgAskFinalizar("Finalizar tarea de verificación");
-
+                //#GT11072025: ya no es opcional preguntar si quiere cerrar o no
+                //msgAskFinalizar("Finalizar tarea de verificación");
+                FinalizandoVerificacionCompleta();
             }
             orderar();
         } catch (Exception e) {
@@ -1066,6 +1078,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                 listDetVeri.setAdapter(adapter3);
                             } else {
                                 adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                                adapter.setAgruparSinLicencia(gl.Agrupar_Sin_Lic_Veri_No_Cons);
                                 listDetVeri.setAdapter(adapter);
                             }
                         }
@@ -1092,7 +1105,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
                             btnRegs.setTextColor(Color.BLACK);
 
-                            msgAskFinalizar("Finalizar tarea de verificación");
+                            //#GT11072025: No es opcional preguntar si cierra la tarea
+                            //msgAskFinalizar("Finalizar tarea de verificación");
+                            FinalizandoVerificacionCompleta();
                             return;
                         }
 
@@ -1176,7 +1191,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 if (preguntoPorDiferencia){
-                    msgAskFinalizar("Finalizar tarea de verificación");
+                    //#GT11072025: No es opcional preguntar si cierra la tarea
+                    //msgAskFinalizar("Finalizar tarea de verificación");
+                    FinalizandoVerificacionCompleta();
                 }
             });
 
@@ -1212,6 +1229,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             });
 
             dialog.setNegativeButton("No", (dialog12, which) -> {
+                frm_detalle_tareas_verificacion.super.finish();
             });
 
             dialog.show();
@@ -1320,6 +1338,16 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
+    //#GT11072025: cerrar la tarea de verificación si ya no hay producto
+    //anteriormente se preguntaba, pero causa inconsistencia si presionan No Cerrar, aunque todo este verificado.
+    private void FinalizandoVerificacionCompleta()
+    {
+        progress.setMessage("Finalizando la tarea de verificación...");
+        progress.show();
+        execws(5);
+    }
+
+
     private void listSortedItems() {
 
         try {
@@ -1336,6 +1364,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     listDetVeri.setAdapter(adapter3);
                 } else {
                     adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                    adapter.setAgruparSinLicencia(gl.Agrupar_Sin_Lic_Veri_No_Cons);
                     listDetVeri.setAdapter(adapter);
                 }
             }

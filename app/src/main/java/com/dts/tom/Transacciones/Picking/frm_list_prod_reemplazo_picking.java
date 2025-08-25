@@ -17,11 +17,13 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStockList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_resList;
+import com.dts.ladapt.list_adapt_reemplazo_detalle;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_reemplazo_picking;
@@ -36,12 +38,18 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
+import static com.dts.tom.Transacciones.Picking.frm_danado_picking.NombreEstado;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBeProducto;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class frm_list_prod_reemplazo_picking extends PBase {
 
     private TextView lblTituloForma,lblCantRegs, lbldDetProducto;
     private EditText txtFiltro;
     private ListView listDispProd;
+    private RecyclerView listaDispProd;
     private Button btnActualizaPickingDet,btnBack;
     private ProgressDialog progress;
 
@@ -57,7 +65,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
     private final ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
-    private list_adapt_detalle_reemplazo_picking adapter;
+    private list_adapt_reemplazo_detalle adapter;
     private clsBeStockReemplazo selitem;
 
     private final clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
@@ -71,6 +79,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private boolean ConExistencia = false;
     private final String resultado="";
     private double CantidadPendiente=0, CantPendSel = 0;
+    private clsBeProducto_Presentacion BePresentacion = null;
 
     private Cursor DT;
 
@@ -89,7 +98,9 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         txtFiltro = findViewById(R.id.txtFiltro);
 
-        listDispProd = findViewById(R.id.listDispProd);
+        //listDispProd = findViewById(R.id.listDispProd);
+
+        listaDispProd = findViewById(R.id.listDispProd);
 
         btnActualizaPickingDet = findViewById(R.id.btnActualizaPickingDet);
         btnBack = findViewById(R.id.btnBack);
@@ -134,7 +145,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         if (Tipo == 1) {
             IdUbicDest = IdUbicacionDestino;
             IdEstDanadoSelect = IdEstadoDanadoSelect;
+        }else if(Tipo == 2){
+            IdUbicDest = gl.gUbicProdNe;
+            IdEstDanadoSelect = gl.IdProductoEstadoNE;
         }
+
 
         execws(1);
     }
@@ -162,9 +177,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
     private void setHandles(){
 
-        try{
-
-            listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        try {
+            /*listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -186,7 +200,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         procesar_registro();
 
                 }
-            });
+            });*/
 
             txtFiltro.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -264,7 +278,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (CantReemplazar>0){
 
                 if (selitem.Despachar.equals("No")){
-                    msgNoDespachar("Se recomienda no despachar de este producto, ¿continuar de todas formas?");
+                    msgNoDespachar("Parámetros de aceptación no definidos. ¿Continuar?");
                 }else{
                     Continua_procesando_registro();
                 }
@@ -327,26 +341,14 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
+            dialog.setTitle(R.string.app_name + " Producto NE (Pick)");
             dialog.setMessage(msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Continua_procesando_registro();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> Continua_procesando_registro());
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
-            });
-
             dialog.show();
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -362,16 +364,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Marcar_Danado();
-                }
-            });
+            dialog.setPositiveButton("Si", (dialog1, which) -> Marcar_Danado());
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
 
             dialog.show();
@@ -391,16 +387,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Marcar_No_Encontrado();
-                }
-            });
+            dialog.setPositiveButton("Si", (dialog1, which) -> Marcar_No_Encontrado());
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
 
             dialog.show();
@@ -500,15 +490,50 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 lblCantRegs.setText("No.Reg: "+count);
             }
 
-            adapter=new list_adapt_detalle_reemplazo_picking(this,BeListStock);
-            listDispProd.setAdapter(adapter);
+            adapter=new list_adapt_reemplazo_detalle(BeListStock);
+            listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+            listaDispProd.setAdapter(adapter);
+            setEventosRv();
 
+            if (gl.Advertir_Mpq_Umbas) {
+                execws(9);
+            }
         } catch (Exception e){
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
         }finally {
             hideProgressDialog();
         }
 
+    }
+
+    private void setEventosRv() {
+        try {
+            adapter.setOnItemClickListener((item, pos) -> {
+                selitem = item;
+                selid = item.IdStock;
+                selidx = pos;
+
+                //#AT20250722 Si Advertir es verdadero y existe una presentacion
+                //valida si la cantidad es multiplo del factor
+                if (gl.Advertir_Mpq_Umbas && BePresentacion != null) {
+                    double Factor = BePresentacion.Factor;
+
+                    //Si es multiplo continua el proceso normal, si no debe confirmar el operador.
+                    if (Factor > 0 && CantReemplazar % Factor == 0) {
+                        adapter.setSelectedIndex(pos);
+                        procesar_registro();
+                    } else {
+                        msgMultiploConfirmar("La cantidad a reemplazar ("+ CantReemplazar +") no es múltiplo de " + Factor +
+                                " para la presentación '" + BePresentacion.Nombre + "'. ¿Desea continuar?", pos);
+                    }
+                } else {
+                    adapter.setSelectedIndex(pos);
+                    procesar_registro();
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void Lista_Filtrada(){
@@ -561,9 +586,15 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.IdProductoBodega = DT.getInt(14);
                     vItem.IdUnidadMedida = DT.getInt(20);
 
-                    if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains("" + Integer.valueOf(gl.termino)) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                    //#EJC20250710: La licencia puede contener letras y filtra la lista por la que coincide con el termino:
+                    if ((gl.termino.matches("\\d+") && String.valueOf(vItem.IdUbicacion).contains(gl.termino)) ||
+                            vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())) {
                         TempBeListStock.add(vItem);
                     }
+                    //#EJC20250710: Anteriormente:
+                    //if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains("" + Integer.valueOf(gl.termino)) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                    //  TempBeListStock.add(vItem);
+                    //}
 
                     DT.moveToNext();
                 }
@@ -572,8 +603,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 lblCantRegs.setText("No.Reg: "+count);
             }
 
-            adapter=new list_adapt_detalle_reemplazo_picking(this,TempBeListStock);
-            listDispProd.setAdapter(adapter);
+            adapter=new list_adapt_reemplazo_detalle(TempBeListStock);
+            listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+            listaDispProd.setAdapter(adapter);
+            setEventosRv();
 
         } catch (Exception e){
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
@@ -676,6 +709,14 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "IdPropietarioBodega",gl.OperadorBodega.IdOperador,
                                 "IdPickingUbic",gBePickingUbic.IdPickingUbic);
                         break;
+                    case 9:
+                        if (gBeProducto.IdProducto == 0) {
+                            toast("El IdProducto es inválido");
+                            return;
+                        }
+
+                        callMethod("Get_Presentacion_Defecto_By_Producto","pIdProducto", gBeProducto.IdProducto);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -715,12 +756,24 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         Lista_Inventario_Disponible();
                     }
                     break;
+                case 9:
+                    processPresentacionDefecto();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }finally {
             hideProgressDialog();
+        }
+    }
+
+    private void processPresentacionDefecto() {
+        try {
+            BePresentacion = null;
+            BePresentacion = xobj.getresult(clsBeProducto_Presentacion.class,"Get_Presentacion_Defecto_By_Producto");
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
@@ -742,13 +795,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (DT.getCount() == 0) {
 
                 if (Tipo==1){
-                    msgMarcarDanado("No hay existencia de este producto en otra ubicación"+
-                                    "\n¿Marcar como producto para reemplazo de todas formas?");
-                    return;
+                    msgMarcarDanado("No hay producto para reemplazar, ¿Marcar de todas formas el producto en estado: "+ NombreEstado+"?");
                 }else{
                     msgMarcarNoEncontrado("No hay existencia de este producto en otra ubicación"+
                                            "\n¿Marcar como producto No Encontrado de todas formas?");
-                    return;
                 }
 
             }
@@ -849,6 +899,34 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processUbicacion:"+e.getMessage());
+        }
+    }
+
+    private void msgMultiploConfirmar(String msg, int posicion) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                adapter.setSelectedIndex(posicion);
+                procesar_registro();
+            });
+
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                if (Tipo==1){
+                    msgMarcarDanado("¿Marcar de todas formas el producto en estado: "+ NombreEstado+"?");
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
 

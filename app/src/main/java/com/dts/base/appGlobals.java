@@ -227,7 +227,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="7.5.2";
+    public final String version="7.7.0";
     public boolean VerificacionSinLoteFechaVen = false;
     public String gBodega_Destino = "";
 
@@ -273,6 +273,8 @@ public class appGlobals extends Application {
     public boolean autoLoad = false;
     public String LicenciaCUR = "";
     public boolean CambioUbicRecepcion = false;
+    public boolean Agrupar_Sin_Lic_Veri_No_Cons = false;
+    public boolean Advertir_Mpq_Umbas = false;
     public boolean Control_Talla_Color = false;
 
     @Override

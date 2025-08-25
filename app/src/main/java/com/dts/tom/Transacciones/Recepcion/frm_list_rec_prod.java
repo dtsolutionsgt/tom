@@ -452,7 +452,7 @@ public class frm_list_rec_prod extends PBase {
 
                     chkRecepcionados.setChecked(false);
 
-                    pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                    pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOCXml;
                     //GT17062021 Se reordena la lista por num_linea
                     if (pListDetalleOC.items==null){
                         throw new Exception("El documento de ingreso no tiene detalles");
@@ -810,9 +810,9 @@ public class frm_list_rec_prod extends PBase {
 
             //#GT08112022_1500: para mantener contuidad del msg, se omite aca
 
-            if (gBeOrdenCompra.DetalleOC.items!=null){
+            if (gBeOrdenCompra.DetalleOCXml!=null){
 
-                for (clsBeTrans_oc_det Obj: gBeOrdenCompra.DetalleOC.items) {
+                for (clsBeTrans_oc_det Obj: gBeOrdenCompra.DetalleOCXml.items) {
 
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
@@ -1268,13 +1268,19 @@ public class frm_list_rec_prod extends PBase {
                 super.finish();
             }
 
-            if (gl.Codigo_Producto!=null){
-                if (!gl.Codigo_Producto.isEmpty()){
-                    txtCodigoProductoRecepcion.setText(gl.Codigo_Producto);
-                    Procesa_Barra_Producto();
-                    gl.Codigo_Producto = "";
+            //#CKFKAgregué este sino porque no funciona la recepcion en B&B
+            if (gl.Interface_SAP) {
+                if (gl.Codigo_Producto!=null){
+                    if (!gl.Codigo_Producto.isEmpty()){
+                        txtCodigoProductoRecepcion.setText(gl.Codigo_Producto);
+                        Procesa_Barra_Producto();
+                        gl.Codigo_Producto = "";
+                    }
                 }
+            }else{
+                Procesa_Barra_Producto();
             }
+
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -1338,7 +1344,7 @@ public class frm_list_rec_prod extends PBase {
                         if (lBeINavBarraPallet.items.size()==1){
                             BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
                         }else {
-                            if(gBeOrdenCompra.IdTipoIngresoOC == 4 || gBeOrdenCompra.IdTipoIngresoOC == 1){
+                            if(gBeOrdenCompra.IdTipoIngresoOC == 4 || gBeOrdenCompra.IdTipoIngresoOC == 1 || gBeOrdenCompra.IdTipoIngresoOC == 5){
                                 BeINavBarraPallet = stream(lBeINavBarraPallet.items).where
                                                           (c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo)
                                                            && c.Bodega_Destino.equals(gl.CodigoBodega)).first();
@@ -1574,7 +1580,7 @@ public class frm_list_rec_prod extends PBase {
                         if (!Recepcion_Completa()){
 
                             if (vTipoDiferencia!=0){
-                                pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOC.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
+                                pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOCXml.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
                                 Lista_Detalle_Documento_Ingreso();
                             }
 

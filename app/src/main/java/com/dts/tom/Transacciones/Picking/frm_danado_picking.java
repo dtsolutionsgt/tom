@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,7 +53,7 @@ public class frm_danado_picking extends PBase {
     private final ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdEstadoDanadoSelect = 0;
-    public static String vNomUbicDestino="";
+    public static String vNomUbicDestino="", NombreEstado="";
     public static boolean existe;
 
     @Override
@@ -94,12 +96,7 @@ public class frm_danado_picking extends PBase {
                         txtUbicDest.setText(IdUbicacionPicking+"");
                         lblNomUbic.setText(NombreUbicacionPicking);
                     }
-
-                    /*BeUbicDestino = new clsBeBodega_ubicacion();
-                    BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
-                    IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-                    execws(2);*/
-
+                    simularEnterEnUbicDest();
                 }
 
                 @Override
@@ -109,32 +106,29 @@ public class frm_danado_picking extends PBase {
 
             });
 
-            txtUbicDest.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (!txtUbicDest.getText().toString().isEmpty()){
+            txtUbicDest.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (!txtUbicDest.getText().toString().isEmpty()){
 
-                            validaUbicacion();
+                        validaUbicacion();
 
-                            BeUbicDestino = new clsBeBodega_ubicacion();
-                            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
-                            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                        BeUbicDestino = new clsBeBodega_ubicacion();
+                        BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                        IdUbicacionDestino = BeUbicDestino.IdUbicacion;
 
-                            if (existe) {
-                                execws(2);
-                            } else {
-                                 msgMover("Producto: "+gBeProducto.Nombre
-                                    + "\n Destino: "+txtUbicDest.getText().toString()
-                                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
-                                    + "\n ¿Mover?");
-                            }
-
+                        if (existe) {
+                            execws(2);
+                        } else {
+                             msgMover("Producto: "+gBeProducto.Nombre
+                                + "\n Destino: "+txtUbicDest.getText().toString()
+                                + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                                + "\n ¿Mover?");
                         }
-                    }
 
-                    return false;
+                    }
                 }
+
+                return false;
             });
 
         }catch (Exception e){
@@ -297,9 +291,6 @@ public class frm_danado_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        /*callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
-                                "pIdPropietario",gBeProducto.Propietario.IdPropietario,
-                                "pIdBodega",gl.IdBodega);*/
                         callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
                                 "pIdPropietario",gBeProducto.Propietario.IdPropietario,
                                 "pIdBodega",gl.IdBodega);
@@ -402,6 +393,36 @@ public class frm_danado_picking extends PBase {
         }
     }
 
+    private void simularEnterEnUbicDest() {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            try {
+                String ubic = txtUbicDest.getText().toString().trim();
+
+                if (!ubic.isEmpty()) {
+                    validaUbicacion();
+
+                    BeUbicDestino = new clsBeBodega_ubicacion();
+                    BeUbicDestino.IdUbicacion = Integer.parseInt(ubic);
+                    IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                    NombreEstado = stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first();
+
+                    if (existe) {
+                        execws(2);
+                    } else {
+                        msgMover("Producto: " + gBeProducto.Nombre
+                                + "\n Destino: " + ubic
+                                + "\n Estado: " + stream(LProductoEstadoDanado.items)
+                                .where(c -> c.IdEstado == IdEstadoDanadoSelect)
+                                .select(c -> c.Nombre).first()
+                                + "\n ¿Mover?");
+                    }
+                }
+            } catch (Exception e) {
+                mu.msgbox("Simulación error: " + e.getMessage());
+            }
+        }, 100); // pequeño delay por seguridad
+    }
+
     private void processUbicacionValida(){
 
         try {
@@ -458,6 +479,7 @@ public class frm_danado_picking extends PBase {
         }
 
     }
+
 
     @Override
     public void onBackPressed() {

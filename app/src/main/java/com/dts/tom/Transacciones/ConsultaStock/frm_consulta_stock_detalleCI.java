@@ -30,8 +30,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,
             lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate,
-            lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres;
-    private TableRow trPresentacion, trResPresentacion;
+            lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres,lblUbicacionPrevia;
+    private TableRow trPresentacion, trResPresentacion, trDispUm, trResUm;
     private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
@@ -71,6 +71,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblResPres = findViewById(R.id.lblResPres);
         txtResPres = findViewById(R.id.txtResPres);
         trResPresentacion = findViewById(R.id.trResPresentacion);
+        trDispUm = findViewById(R.id.trDispUm);
+        trResUm = findViewById(R.id.trResUm);
+        lblUbicacionPrevia = findViewById(R.id.lblIdUbicacion_anterior);
 
         ProgressDialog();
 
@@ -175,6 +178,20 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     txtResPres.setText(gl.existencia.Pres);
                 }
 
+                if (gl.existencia.IdPresentacion != 0) {
+                    trPresentacion.setVisibility(View.VISIBLE);
+                    trResPresentacion.setVisibility(View.VISIBLE);
+
+                    trResUm.setVisibility(View.GONE);
+                    trDispUm.setVisibility(View.GONE);
+                } else {
+                    trPresentacion.setVisibility(View.GONE);
+                    trResPresentacion.setVisibility(View.GONE);
+
+                    trResUm.setVisibility(View.VISIBLE);
+                    trDispUm.setVisibility(View.VISIBLE);
+                }
+
                 lblestado.setText(gl.existencia.Estado + "");
                 lblpedido.setText(gl.existencia.Pedido + "");
                 lblpicking.setText(gl.existencia.Pick + "");
@@ -186,6 +203,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lbllote.setText(gl.existencia.Lote + "");
                 lblubic.setText(gl.existencia.idUbic + "");
                 lblnomUbic.setText(gl.existencia.Ubic + "");
+                //GT25072025: mostrar ubicacion_anterior
+                lblUbicacionPrevia.setText(gl.existencia.IdUbicacion_anterior+"");
 
                 if (gl.existencia.LicPlate.equals(0)) {
                     lblLicPlate.setText("");

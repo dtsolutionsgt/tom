@@ -30,7 +30,7 @@ public class clsBePropietarios {
     @Element(required=false) public String Clave_Acceso="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public boolean Es_Consolidador = false;
-
+    @Element(required=false) public boolean ControlUx = false;
 
     public clsBePropietarios() {
     }
@@ -65,6 +65,7 @@ public class clsBePropietarios {
         this.Codigo_Acceso=Codigo_Acceso;
         this.Clave_Acceso=Clave_Acceso;
         this.Es_Consolidador=Es_Consolidador;
+        this.ControlUx = ControlUx;
     }
 
 

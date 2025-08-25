@@ -110,10 +110,9 @@
 
                     <TextView
                         android:id="@+id/lblCodigoRe"
-                        android:layout_width="80dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:minHeight="50dp"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="Código"
@@ -175,10 +174,10 @@
 
                     <TextView
                         android:id="@+id/lblUbicRe"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:minHeight="50dp"
+                        android:minHeight="150dp"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="Ubicación"
@@ -255,7 +254,6 @@
                         android:id="@+id/lblEstadoRe"
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:text="Estado"
                         android:textColor="#FFFFFF"
@@ -309,11 +307,16 @@
                         android:visibility="visible" />
                 </LinearLayout>
 
-                <ListView
+                <!--ListView
                     android:id="@+id/listDispProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="horizontal|vertical" />
+                    android:scrollbars="horizontal|vertical" /-->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listDispProd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </HorizontalScrollView>
 
