@@ -39,12 +39,13 @@ public class clsBeProducto_Presentacion {
     @Element(required=false) public int IdPresentacionPallet=0;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public boolean ExisteStock=false;
+    @Element(required=false) public clsBeProducto_presentacion_tarimaList MedidasPorTarima=new clsBeProducto_presentacion_tarimaList();
 
-    // Lista dual para XML y JSON
+   /* // Lista dual para XML y JSON
     @Element(required=false) public clsBeProducto_presentacion_tarimaList MedidasPorTarimaXml = new clsBeProducto_presentacion_tarimaList();
     @SerializedName("MedidasPorTarima")
     private clsBeProducto_presentacion_tarimaList MedidasPorTarimaJson = new clsBeProducto_presentacion_tarimaList();
-
+*/
     @Element(required=false) public clsBeProducto_rellenadoList RellenadoPorUbicacionDePicking = new clsBeProducto_rellenadoList();
     @Element(required=false) public String Codigo="";
 
@@ -130,7 +131,7 @@ public class clsBeProducto_Presentacion {
         Factor = value;
     }
 
-    public clsBeProducto_presentacion_tarimaList getMedidasPorTarima() {
+    /*public clsBeProducto_presentacion_tarimaList getMedidasPorTarima() {
         return MedidasPorTarimaXml != null && !MedidasPorTarimaXml.items.isEmpty()
                 ? MedidasPorTarimaXml
                 : MedidasPorTarimaJson;
@@ -146,7 +147,7 @@ public class clsBeProducto_Presentacion {
                 && MedidasPorTarimaJson != null) {
             MedidasPorTarimaXml = MedidasPorTarimaJson;
         }
-    }
+    }*/
 
     public clsBeProducto_rellenadoList getRellenadoPorUbicacionDePicking() {
         return RellenadoPorUbicacionDePicking;

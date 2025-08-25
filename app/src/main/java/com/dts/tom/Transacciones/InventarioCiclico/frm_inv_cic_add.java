@@ -1206,6 +1206,7 @@ public class frm_inv_cic_add extends PBase {
                     if (pitem.Cant_stock!=0 &&
                        (pitem.IdUbicacion_nuevo!=0 ||
                         !pitem.Lote.equals(pitem.Lote_stock) ||
+                        !pitem.lic_plate.equals(invCongelado.lic_plate) ||
                         pitem.IdProductoEstado!=pitem.IdProductoEst_nuevo ||
                         !pitem.Fecha_vence.equals(pitem.Fecha_vence_stock) )){
                         pitem.Cant_stock=0.0;

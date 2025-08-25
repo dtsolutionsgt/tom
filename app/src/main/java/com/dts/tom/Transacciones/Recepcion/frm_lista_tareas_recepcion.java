@@ -292,10 +292,10 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_IdOrdenCompraEnc_By_Licencia","pLicenciaIngreso",txtTarea.getText().toString());
                         break;
                     case 7:
-                        //callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
-                        callMethodJsonPost("GetSingleRecJson",
-                                "pIdRecepcionEnc", gl.gIdRecepcionEnc,
-                                "CodigoProducto", gl.Codigo_Producto);
+                        callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        /*callMethodJsonPost("GetSingleRecJson",
+                                     "pIdRecepcionEnc", gl.gIdRecepcionEnc,
+                                           "CodigoProducto", gl.Codigo_Producto);*/
 
                         break;
                     case 8:
@@ -356,8 +356,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processIdOrdenCompra();
                     break;
                 case 7:
-                    //processIdRecepcion();
-                    processIdRecepcionJson();
+                    processIdRecepcion();
+                    //processIdRecepcionJson();
                     break;
                 case 8:
                     processListaOrdenCompra();
