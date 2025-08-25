@@ -273,8 +273,6 @@ public class appGlobals extends Application {
     public boolean autoLoad = false;
     public String LicenciaCUR = "";
     public boolean CambioUbicRecepcion = false;
-    public boolean Agrupar_Sin_Lic_Veri_No_Cons = false;
-    public boolean Advertir_Mpq_Umbas = false;
     public boolean Control_Talla_Color = false;
 
     @Override

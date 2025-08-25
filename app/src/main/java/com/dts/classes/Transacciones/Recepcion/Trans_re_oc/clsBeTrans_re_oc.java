@@ -2,7 +2,6 @@ package com.dts.classes.Transacciones.Recepcion.Trans_re_oc;
 
 
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
-import com.google.gson.annotations.SerializedName;
 
 import org.simpleframework.xml.Element;
 
@@ -20,8 +19,11 @@ public class clsBeTrans_re_oc {
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public int Firma_operador=0;
     @Element(required=false) public boolean IsNew=false;
-    @SerializedName("OC")@Element(required=false) public clsBeTrans_oc_enc OC=new clsBeTrans_oc_enc();
-
+    @Element(required=false) public clsBeTrans_oc_enc OC=new clsBeTrans_oc_enc();
+    @Element(required=false) public String No_Erp_Docentry_Entrega = "";
+    @Element(required=false) public String No_Erp_Docnum_Entrega = "";
+    @Element(required=false) public String No_Erp_Docentry_Faltante = "";
+    @Element(required=false) public String No_Erp_Docnum_Faltante = "";
 
     public clsBeTrans_re_oc() {
     }
