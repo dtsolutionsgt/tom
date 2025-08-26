@@ -8015,15 +8015,15 @@ public class frm_recepcion_datos extends PBase {
 
                     case 21:
                         callMethod("Finalizar_Recepcion_Parcial_Pallet_Proveedor","pRecEnc",gl.gBeRecepcion,
-                                "pIdOrdenCompraEnc",pIdOrdenCompraEnc,
-                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pIdEmpresa", gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,
-                                "pIdUsuario",gl.IdOperador,
-                                "pBeStockRec",vBeStockRecPallet,
-                                "pBeRecDet",BeTransReDet,
-                                "pBeBarraPallet",BeINavBarraPallet,
-                                "pEsTransferencia",EsTransferenciaInternaWMS);
+                                               "pIdOrdenCompraEnc",pIdOrdenCompraEnc,
+                                               "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                               "pIdEmpresa", gl.IdEmpresa,
+                                               "pIdBodega",gl.IdBodega,
+                                               "pIdUsuario",gl.IdOperador,
+                                               "pBeStockRec",vBeStockRecPallet,
+                                               "pBeRecDet",BeTransReDet,
+                                               "pBeBarraPallet",BeINavBarraPallet,
+                                               "pEsTransferencia",EsTransferenciaInternaWMS);
                         break;
 
                     case 22:
