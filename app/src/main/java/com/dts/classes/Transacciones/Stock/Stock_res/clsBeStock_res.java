@@ -47,6 +47,10 @@ public class clsBeStock_res {
     @Element(required=false) public String No_Pedido="";
     @Element(required=false) public int IdUbicacionAbastecerCon=0;
 
+    @Element(required=false) public String Talla="";
+    @Element(required=false) public String Color="";
+
+    @Element(required=false) public int IdProductoTallaColor=0;
     public clsBeStock_res() {
     }
 
@@ -59,7 +63,8 @@ public class clsBeStock_res {
                           int IdPicking, int IdPedido, int IdDespacho, String User_agr,
                           String Fec_agr, String User_mod, String Fec_mod, String Host,
                           int anada, String Fecha_manufactura, String Atributo_Variante_1, boolean Control_Ultimo_Lote,
-                          String Ultimo_Lote, Boolean Pallet_no_estandar, String Codigo_Producto, String No_Pedido, int IdUbicacionAbastecerCon) {
+                          String Ultimo_Lote, Boolean Pallet_no_estandar, String Codigo_Producto, String No_Pedido, int IdUbicacionAbastecerCon,
+                          String Talla,String Color, int IdProductoTallaColor) {
 
         this.IdStockRes=IdStockRes;
         this.IdTransaccion=IdTransaccion;
@@ -102,6 +107,9 @@ public class clsBeStock_res {
         this.Codigo_Producto=Codigo_Producto;
         this.No_Pedido=No_Pedido;
         this.IdUbicacionAbastecerCon = IdUbicacionAbastecerCon;
+        this.Talla = Talla;
+        this.Color = Color;
+        this.IdProductoTallaColor = IdProductoTallaColor;
     }
 
 
@@ -349,6 +357,23 @@ public class clsBeStock_res {
         return IdUbicacionAbastecerCon;
     }
     public void setIdUbicacionAbastecerCon(int value) { IdUbicacionAbastecerCon=value;}
+
+    public String getTalla() {
+        return Talla;
+    }
+    public void setTalla(String value) {Talla=value;}
+
+    public String getColor() {
+        return Color;
+    }
+    public void setColor(String value) {Color=value;}
+
+    public int getIdProductoTallaColor() {
+        return IdProductoTallaColor;
+    }
+    public void setIdProductoTallaColor(int value) {
+        IdProductoTallaColor=value;
+    }
 }
 
 
