@@ -988,6 +988,8 @@ public class frm_recepcion_datos extends PBase {
 
             btnTareas.setOnClickListener(v -> {
                 if (isButtonClickable) {
+                    //#GT30092025: se remueve en el xml, android:onClick="BotonGuardarRecepcion"
+                    //ya que no tiene uso directo, se implementa el listener
                     // Desactiva temporalmente el FAB
                     disableFabTemporarily();
 
@@ -9692,7 +9694,7 @@ public class frm_recepcion_datos extends PBase {
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
                             fillUbicacion();
-                            if (txtNoLP.getText().toString().trim().equals("")){
+                            if (txtNoLP.getText().toString().trim().isEmpty()){
                                 progress.hide();
                                 msgbox("La licencia no puede ser vacía");
                                 return;
@@ -9830,9 +9832,15 @@ public class frm_recepcion_datos extends PBase {
                 MensajeAdicionalParaImpresion = "Recepción de Producción procesada en ERP";
                 Imprime_Barra_Despues_Guardar();
             }else{
-                if (!respuesta.isEmpty() || !respuesta.equals("")){
-                    msgboxErrorPush("No se puedo registrar la recepción " + respuesta);
+
+                //#GT30092025: mejora en la validación, ya que isempty y equals es lo mismo
+                if (respuesta != null && !respuesta.isEmpty()) {
+                    msgboxErrorPush("No se pudo registrar la recepción " + respuesta);
                 }
+
+//                if (!respuesta.isEmpty() || !respuesta.equals("")){
+//                    msgboxErrorPush("No se puedo registrar la recepción " + respuesta);
+//                }
             }
 
         }catch (Exception e){

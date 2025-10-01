@@ -746,9 +746,9 @@
         android:layout_marginBottom="15dp"
         android:backgroundTint="@color/medium"
         android:clickable="true"
-        android:onClick="BotonGuardarRecepcion"
         android:src="@drawable/ok_btn"
-        app:maxImageSize="32dp" />
+        app:maxImageSize="32dp"
+        tools:ignore="OnClick" />
 
 
 </RelativeLayout>
