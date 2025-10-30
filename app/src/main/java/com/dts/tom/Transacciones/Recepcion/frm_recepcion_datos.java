@@ -9578,7 +9578,6 @@ public class frm_recepcion_datos extends PBase {
     private void execws(int callbackvalue) {
         try{
             //#GT29102025: validar url antes de invocar al WS
-            //error controlado desde recepcion.
             final String safeUrl = requireValidUrl(gl.wsurl);
             ws.callback=callbackvalue;
             ws.execute();
@@ -9606,8 +9605,6 @@ public class frm_recepcion_datos extends PBase {
         }
         return s;
     }
-
-
     private void showFatalAndGoHome(String detail) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)

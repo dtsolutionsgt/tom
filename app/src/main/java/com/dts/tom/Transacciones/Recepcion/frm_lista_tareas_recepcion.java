@@ -33,6 +33,7 @@ import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
@@ -378,9 +379,72 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void execws(int callbackvalue) {
-        ws.callback=callbackvalue;
-        ws.execute();
+        try{
+            //#GT29102025: validar url antes de invocar al WS
+            final String safeUrl = requireValidUrl(gl.wsurl);
+            ws.callback=callbackvalue;
+            ws.execute();
+        } catch (Exception ex) {
+            showFatalAndGoHome(ex.getMessage()); // o un Toast/Alert y return
+        }
     }
+
+    //********************************************************//
+    //#GT30102025: VALIDACION DE URL
+    /** Valida que la URL no sea nula, vacía ni mal formada. No corrige. */
+    private String requireValidUrl(String url) {
+
+        //#GT29102025: esto causa un bug controlado
+        //url="";
+
+        if (url == null) throw new IllegalStateException("Error: la URL del WebService es nula.");
+        String s = url.trim();
+        if (s.isEmpty()) throw new IllegalStateException("Error: la URL del WebService está vacía.");
+        if (!s.startsWith("http://") && !s.startsWith("https://")) {
+            throw new IllegalArgumentException("Error: la URL debe iniciar con http:// o https://");
+        }
+        try {
+            new java.net.URL(s); // valida sintaxis
+        } catch (java.net.MalformedURLException e) {
+            throw new IllegalArgumentException("Error: la URL del WebService es inválida.", e);
+        }
+        return s;
+    }
+    private void showFatalAndGoHome(String detail) {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error de comunicación")
+                    .setMessage("La configuración del servicio no es válida.\n" + detail + "\nLa app se reiniciará al menu principal.")
+                    .setCancelable(false)
+                    .setPositiveButton("Aceptar", (d, w) -> softRestartToMain())
+                    .show();
+        });
+    }
+    private void softRestartToMain() {
+        // 1) Limpieza de estado volátil
+        try { cleanRuntimeState(); } catch (Exception ignore) { /* no bloquear por limpieza */ }
+
+        // 2) Volver al MainActivity con la task stack limpia
+        Intent intent = new Intent(this, Mainmenu.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finishAffinity();
+    }
+
+    private void cleanRuntimeState() {
+        try {
+            // Limpia referencias básicas
+            ws = null;      // limpia el handler actual
+            Log.i("App", "Estado en memoria limpio antes del reinicio.");
+        } catch (Exception e) {
+            Log.w("App", "Error al limpiar estado: " + e.getMessage());
+        }
+    }
+
+    //AQUI TERMINA VALIDACIÓN DE URL
+    //********************************************************//
 
     private void processTipoPedido(){
 
