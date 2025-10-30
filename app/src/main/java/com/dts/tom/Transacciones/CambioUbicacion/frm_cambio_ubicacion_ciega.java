@@ -2551,14 +2551,48 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+
+    public clsBeProductoList filtrarProductos(clsBeProductoList listaOriginal) {
+        clsBeProductoList listaFiltrada = new clsBeProductoList();
+        listaFiltrada.items = new ArrayList<>();
+
+        if (listaOriginal == null || listaOriginal.items == null)
+            return listaFiltrada;
+
+        for (clsBeProducto producto : listaOriginal.items) {
+
+            // Validar que el producto tenga Stock y revisar la cantidad reservada
+            if (producto.Stock == null || producto.Stock.CantidadReservadaUMBas <= 0) {
+                listaFiltrada.items.add(producto);
+            }
+        }
+
+        return listaFiltrada;
+    }
+
+
     private void processStockLP(){
 
         try {
 
+            clsBeProducto tmpProducto = new clsBeProducto();
+            clsBeProductoList tmpProductoList = new clsBeProductoList();
+
             progress.setMessage("Validando ubicación");
             progress.show();
 
-            productoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
+            //#GT29102025: validar que el stock dentro del producto no tenga reserva.
+            //productoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
+            tmpProductoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
+
+            if(escaneoPallet && tmpProductoList == null){
+                lblDescProducto.setTextColor(Color.RED);
+                cvProdID = 0;
+                lblDescProducto.setText ("Código de licencia no válido");
+                progress.cancel();
+            }else{
+                productoList =filtrarProductos(tmpProductoList);
+            }
 
             if (escaneoPallet && productoList == null) {
                 lblDescProducto.setTextColor(Color.RED);

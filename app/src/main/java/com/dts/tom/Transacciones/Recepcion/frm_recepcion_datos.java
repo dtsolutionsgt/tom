@@ -84,6 +84,8 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.classes.clsBeImagen;
+import com.dts.tom.MainActivity;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
@@ -112,6 +114,7 @@ import java.util.regex.Pattern;
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 //import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
@@ -7765,7 +7768,9 @@ public class frm_recepcion_datos extends PBase {
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
-            super(Parent,Url);
+
+            super(Parent, Url);
+
         }
 
         @Override
@@ -9571,9 +9576,72 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void execws(int callbackvalue) {
-        ws.callback=callbackvalue;
-        ws.execute();
+        try{
+            //#GT29102025: validar url antes de invocar al WS
+            //error controlado desde recepcion.
+            final String safeUrl = requireValidUrl(gl.wsurl);
+            ws.callback=callbackvalue;
+            ws.execute();
+        } catch (Exception ex) {
+            showFatalAndGoHome(ex.getMessage()); // o un Toast/Alert y return
+        }
     }
+
+    /** Valida que la URL no sea nula, vacía ni mal formada. No corrige. */
+    private String requireValidUrl(String url) {
+
+        //#GT29102025: esto causa un bug controlado
+        //url="";
+
+        if (url == null) throw new IllegalStateException("Error: la URL del WebService es nula.");
+        String s = url.trim();
+        if (s.isEmpty()) throw new IllegalStateException("Error: la URL del WebService está vacía.");
+        if (!s.startsWith("http://") && !s.startsWith("https://")) {
+            throw new IllegalArgumentException("Error: la URL debe iniciar con http:// o https://");
+        }
+        try {
+            new java.net.URL(s); // valida sintaxis
+        } catch (java.net.MalformedURLException e) {
+            throw new IllegalArgumentException("Error: la URL del WebService es inválida.", e);
+        }
+        return s;
+    }
+
+
+    private void showFatalAndGoHome(String detail) {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error de comunicación")
+                    .setMessage("La configuración del servicio no es válida.\n" + detail + "\nLa app se reiniciará al menu principal.")
+                    .setCancelable(false)
+                    .setPositiveButton("Aceptar", (d, w) -> softRestartToMain())
+                    .show();
+        });
+    }
+    private void softRestartToMain() {
+        // 1) Limpieza de estado volátil
+        try { cleanRuntimeState(); } catch (Exception ignore) { /* no bloquear por limpieza */ }
+
+        // 2) Volver al MainActivity con la task stack limpia
+        Intent intent = new Intent(this, Mainmenu.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finishAffinity();
+    }
+
+    private void cleanRuntimeState() {
+        try {
+            // Limpia referencias básicas
+            ws = null;      // limpia el handler actual
+            Log.i("App", "Estado en memoria limpio antes del reinicio.");
+        } catch (Exception e) {
+            Log.w("App", "Error al limpiar estado: " + e.getMessage());
+        }
+    }
+
+
 
     private void processExisteLp(){
 

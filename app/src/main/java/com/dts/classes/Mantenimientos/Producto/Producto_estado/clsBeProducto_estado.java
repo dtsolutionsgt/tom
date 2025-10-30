@@ -26,6 +26,9 @@ public class clsBeProducto_estado {
     @Element(required=false) public String Codigo_Bodega_ERP="";
     @Element(required=false) public int Dias_Vencimiento_Clasificacion = 0;
     @Element(required=false) public int Tolerancia_Dias_Vencimiento  = 0;
+
+    @Element(required=false) public boolean Reservar_En_UmBas=false;
+
     public clsBeProducto_estado() {
     }
 
@@ -34,7 +37,7 @@ public class clsBeProducto_estado {
                                 String User_agr,String Fec_agr,String User_mod,String Fec_mod,
                                 boolean Danado,boolean Sistema,boolean IsNew,String Descripcion,
                                 String Codigo_Bodega_ERP, int Dias_Vencimiento_Clasificacion,
-                                int Tolerancia_Dias_Vencimiento
+                                int Tolerancia_Dias_Vencimiento, boolean Reservar_En_UmBas
     ) {
 
         this.IdEstado=IdEstado;
@@ -56,6 +59,7 @@ public class clsBeProducto_estado {
         this.Codigo_Bodega_ERP=Codigo_Bodega_ERP;
         this.Dias_Vencimiento_Clasificacion = Dias_Vencimiento_Clasificacion;
         this.Tolerancia_Dias_Vencimiento = Tolerancia_Dias_Vencimiento;
+        this.Reservar_En_UmBas = Reservar_En_UmBas;
 
     }
 
@@ -174,6 +178,13 @@ public class clsBeProducto_estado {
     }
     public void setTolerancia_Dias_Vencimiento(int value) {
         Tolerancia_Dias_Vencimiento=value;
+    }
+
+    public boolean getReservar_En_Umbas() {
+        return Reservar_En_UmBas;
+    }
+    public void setReservar_En_Umbas(boolean value) {
+        Reservar_En_UmBas=value;
     }
 
     @Override

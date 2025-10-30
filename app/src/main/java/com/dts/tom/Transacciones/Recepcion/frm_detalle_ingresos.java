@@ -461,15 +461,33 @@ public class frm_detalle_ingresos extends PBase {
             Anulada =(Boolean) xobj.getSingle("pAnulada",Boolean.class);
 
             if (Finalizada){
-                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " ya fue finalizada");
-                progress.cancel();
-                doExit();
+                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " ya fue finalizada, sera redirigido a la lista principal.");
+
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.cancel();
+                        doExit();
+                    }
+                }, 5000);
+
+
+                //doExit();
             }
 
             if (Anulada){
-                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " fue anulada");
-                progress.cancel();
-                doExit();
+                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " fue anulada, sera redirigido a la lista principal.");
+
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.cancel();
+                        doExit();
+                    }
+                }, 5000);
+
+                //progress.cancel();
+                //doExit();
             }
 
             if (Finalizada & Anulada){
