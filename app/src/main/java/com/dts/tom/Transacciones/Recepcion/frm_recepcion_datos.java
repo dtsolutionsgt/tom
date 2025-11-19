@@ -1265,7 +1265,7 @@ public class frm_recepcion_datos extends PBase {
                     cmbVenceRec.setSelectAllOnFocus(true);
                 });
                 dialog.show();
-
+                
             }
 
         } catch (Exception ex) {
