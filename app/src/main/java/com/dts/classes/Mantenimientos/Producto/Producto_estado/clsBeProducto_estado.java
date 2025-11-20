@@ -26,6 +26,9 @@ public class clsBeProducto_estado {
     @Element(required=false) public String Codigo_Bodega_ERP="";
     @Element(required=false) public int Dias_Vencimiento_Clasificacion = 0;
     @Element(required=false) public int Tolerancia_Dias_Vencimiento  = 0;
+
+    @Element(required=false) public boolean reservar_en_umbas = false;
+
     public clsBeProducto_estado() {
     }
 
