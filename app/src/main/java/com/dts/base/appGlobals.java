@@ -274,6 +274,9 @@ public class appGlobals extends Application {
     public String LicenciaCUR = "";
     public boolean CambioUbicRecepcion = false;
     public boolean Control_Talla_Color = false;
+    public boolean Agrupar_Sin_Lic_Veri_No_Cons = false;
+    public boolean Advertir_Mpq_Umbas = false;
+
 
     @Override
     public void onCreate() {
